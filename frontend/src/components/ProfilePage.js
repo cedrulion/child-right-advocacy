@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from '../Assets/unicef_logo.png';
+import { FaUser } from 'react-icons/fa';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({
@@ -66,28 +67,24 @@ const ProfilePage = () => {
         </h1>
       </div>
 
-      <div className="flex flex-col items-center bg-gray-200 py-6">
+      <div className="flex flex-col p-6 bg-gray-200">
         <div className="flex items-center space-x-4">
-          <img
-            src="profile-picture.jpg" // Replace with actual profile picture source
-            alt="Profile"
-            className="rounded-full w-20 h-20"
-          />
-          <div>
-            <h2 className="text-xl font-bold text-gray-800">{profile.firstName} {profile.lastName}</h2>
-            <p className="text-gray-500">@{profile.username}</p>
-          </div>
-          <button
-            className="ml-auto bg-gray-500 text-white font-bold px-4 py-2 rounded-full"
-            onClick={() => setEditMode(!editMode)}
-          >
-            {editMode ? 'Cancel' : 'Edit Profile'}
-          </button>
+          <FaUser className="text-gray-700 text-4xl" />
+          <h2 className="text-xl font-bold text-gray-800">{profile.firstName} {profile.lastName} <br></br>
+         <p className="text-sm text-gray-500">@{profile.username}</p></h2>  
         </div>
+        <button
+          className="ml-auto bg-gray-500 text-white font-bold px-4 py-2 rounded-full"
+          onClick={() => setEditMode(!editMode)}
+        >
+          {editMode ? 'Cancel' : 'Edit Profile'}
+        </button>
+      </div>
 
-        {/* Profile Details */}
+      {/* Profile Details */}
+      <div>
         {!editMode ? (
-          <div className="bg-white w-10/12 mt-6 p-6 rounded-lg shadow-md">
+          <div className="bg-white w-10/12 mt-6 p-6 rounded-lg shadow-md mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-800">
               <div>
                 <h4 className="text-sm font-bold text-gray-500">Firstname</h4>

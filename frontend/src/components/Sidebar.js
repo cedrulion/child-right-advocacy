@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaHome, FaReceipt, FaCalendarAlt, FaUserTie, FaEnvelope, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaReceipt, FaCalendarAlt, FaUserTie, FaEnvelope, FaSignOutAlt, FaUser} from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ onClose }) => {
@@ -30,16 +30,16 @@ const Sidebar = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed top-0 bottom-0 left-0 w-60 bg-blue-600 text-white shadow-lg z-50 font-sans">
+    <div className="fixed top-0 bottom-0 left-0 w-60 bg-blue-500 text-white shadow-lg z-50 font-sans">
       {/* User Info Section */}
-      <div className="p-5 bg-blue-700 text-white text-center">
-        <img
-          src="https://via.placeholder.com/100" // Replace with actual profile image
-          alt="User Avatar"
-          className="rounded-full w-16 h-16 mx-auto mb-2"
-        />
+      <div className=" flex p-5 bg-blue-500 text-white text-center">
+    <div className="bg-gray-300 rounded-full w-30 h-9 flex items-center justify-center">
+       <FaUser className="text-gray-700 text-xl" />
+    </div>
+        <div>
         <span className="font-semibold block">{loggedInUser?.username}</span>
         <span className="text-sm block">{loggedInUser?.email}</span>
+        </div>
       </div>
 
       {/* Navigation Links */}
@@ -50,7 +50,7 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/postfeed"
               onClick={() => handleItemClick('/dashboard/postfeed')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/postfeed' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/postfeed' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaHome className="mr-3" />
@@ -60,7 +60,7 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/profile"
               onClick={() => handleItemClick('/dashboard/profile')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/profile' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/profile' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaUserTie className="mr-3" />
@@ -70,7 +70,7 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/message"
               onClick={() => handleItemClick('/dashboard/message')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/message' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/message' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaEnvelope className="mr-3" />
@@ -80,7 +80,7 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/discussion"
               onClick={() => handleItemClick('/dashboard/discussion')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/discussion' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/discussion' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaEnvelope className="mr-3" />
@@ -90,7 +90,7 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/eventm"
               onClick={() => handleItemClick('/dashboard/eventm')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/eventm' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/eventm' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaEnvelope className="mr-3" />
@@ -100,7 +100,7 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/case"
               onClick={() => handleItemClick('/dashboard/case')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/case' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/case' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaEnvelope className="mr-3" />
@@ -110,7 +110,7 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/compaignm"
               onClick={() => handleItemClick('/dashboard/compaignm')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/compaignm' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/compaignm' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaEnvelope className="mr-3" />
@@ -124,17 +124,27 @@ const Sidebar = ({ onClose }) => {
               to="/dashboard/listuser"
               onClick={() => handleItemClick('/dashboard/listuser')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/listuser' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/listuser' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaHome className="mr-3" />
               Manage Users
             </Link>
             <Link
+              to="/dashboard/resourcema"
+              onClick={() => handleItemClick('/dashboard/resourcema')}
+              className={`flex items-center p-3 mb-2 rounded-md ${
+                activeItem === '/dashboard/resourcema' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+              } transition duration-150`}
+            >
+              <FaHome className="mr-3" />
+              Manage Resources
+            </Link>
+            <Link
               to="/dashboard/statistics"
               onClick={() => handleItemClick('/dashboard/statistics')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/statistics' ? 'bg-blue-500 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/statistics' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaReceipt className="mr-3" />
@@ -148,7 +158,7 @@ const Sidebar = ({ onClose }) => {
       <div className="absolute bottom-0 left-0 w-full">
         <button
           onClick={handleLogout}
-          className="flex items-center justify-center w-full p-3 text-white bg-blue-700 hover:bg-blue-800"
+          className="flex items-center justify-center w-full p-3 text-white bg-gray-700 hover:bg-blue-800"
         >
           <FaSignOutAlt className="mr-3" />
           Logout

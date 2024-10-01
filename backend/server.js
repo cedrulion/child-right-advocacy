@@ -39,13 +39,14 @@ const authRoutes = require('./routes/authRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const caseRoutes = require('./routes/caseRoutes');
 const postRoutes = require('./routes/postRoutes');
+const resourceRoutes = require('./routes/resourceRoutes');
 const eventOrCampaignRoutes = require('./routes/eventOrCampaignRoutes');
 app.use('/api', eventOrCampaignRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', messageRoutes);
 app.use('/api', caseRoutes);
 app.use('/api', postRoutes); 
-
+app.use('/api/resources', resourceRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/media/:filename', (req, res) => {

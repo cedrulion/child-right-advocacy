@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import logo from '../Assets/unicef_logo.png'; 
+import { FaUser } from 'react-icons/fa';
+
 
 const WelcomeUser = () => {
   
@@ -22,16 +24,23 @@ const WelcomeUser = () => {
           Child Rights <span className="text-blue-400">ADVOCACY</span>
         </h1>
       </div>
-      <div className="bg-white shadow-md p-6 mt-10 rounded-lg text-center">
-        <h2 className="text-xl font-semibold mt-4">{loggedInUser.username}</h2>
-        <p className="text-gray-700 mt-2">
-          Welcome Again admin, <strong>{loggedInUser.username}</strong>. Help us to achieve 
-          the goal of Child Advocacy. Your assistance in making a safe place for children 
-          is very appreciated by our community.
-        </p>
+      <div className="bg-white shadow-lg p-8 rounded-lg text-center max-w-lg mx-auto mt-8">
+  <div className="flex justify-center mb-6">
+    <div className="bg-gray-300 rounded-full w-24 h-24 flex items-center justify-center">
+       <FaUser className="text-gray-700 text-4xl" />
+    </div>
+  </div>
+  <h2 className="border-b-2 border-gray-300 text-2xl font-semibold mb-6">
+    {loggedInUser.username}
+  </h2>
+  <p className="text-gray-600 leading-relaxed mb-6">
+    Welcome again, <strong>{loggedInUser.username}</strong>. Your assistance in 
+    achieving the goal of Child Advocacy is invaluable. Our community deeply 
+    appreciates your efforts in creating a safer place for children.
+  </p>
+  <h3 className="text-xl font-bold text-gray-800">Have a great day!</h3>
+</div>
 
-        <h3 className="text-2xl mt-6 font-bold text-blue-600">Have a great Day !!</h3>
-      </div>
     </div>
   );
 };

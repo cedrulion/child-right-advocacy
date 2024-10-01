@@ -35,11 +35,11 @@ const Login = () => {
        localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
        setSuccess('Signup successful!');
         if (loggedInUser.role === 'USER') {
-          navigate('/dashboard/postfeed');
+          navigate('/dashboard/welcome');
         } else if (loggedInUser.role === 'ADMIN') {
           navigate('/dashboard/postfeed');
         } else {
-          navigate('/dashboard/postfeed'); 
+          navigate('/dashboard/welcome'); 
         }
       }  catch (err) {
       setError('Error signing up');
