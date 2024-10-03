@@ -115,7 +115,7 @@ const ResourceManagement = () => {
   };
 
   return (
-    <div className="min-h-screen p-5 bg-gray-100">
+    <div className="min-h-screen p-5 bg-gray-100" style={{ fontFamily: 'roboto' }}>
       {/* Header */}
       <div className="flex justify-center mb-5">
         <img src={logo} alt="UNICEF Logo" className="h-10" />

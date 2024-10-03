@@ -57,7 +57,7 @@ const PostFeed = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white mt-5">
+    <div className="min-h-screen bg-white mt-5" style={{ fontFamily: 'roboto' }}>
       {/* Header */}
       <div className="flex justify-center text-center mb-3">
         <img src={logo} alt="UNICEF Logo" className="h-10" />

@@ -2,7 +2,7 @@ import React from 'react';
 
 const DiscussionsForums = () => {
   return (
-    <div className="min-h-screen bg-gray-200">
+    <div className="min-h-screen bg-gray-200" style={{ fontFamily: 'roboto' }}>
       {/* Header Section */}
       <header className="bg-white w-full flex justify-between items-center py-4 px-8 shadow-lg">
         <img src="unicef-logo.png" alt="UNICEF Logo" className="h-12" />

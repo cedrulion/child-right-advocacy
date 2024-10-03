@@ -50,7 +50,7 @@ const Case = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100" style={{ fontFamily: 'roboto' }}>
       <div className="max-w-screen-lg mx-auto p-6">
         {/* Header Section */}
         <div className="flex justify-center text-center mt-5 mb-3">

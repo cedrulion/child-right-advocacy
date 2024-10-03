@@ -93,7 +93,7 @@ const Message = () => {
   };
 
   return (
-    <div className="">
+    <div className="" style={{ fontFamily: 'roboto' }}>
         <div className=" flex justify-center text-center mt-5 mb-3">
         <img src={logo} alt="UNICEF Logo" className="h-10" />
         <h1 className="text-4xl font-bold text-gray-800">

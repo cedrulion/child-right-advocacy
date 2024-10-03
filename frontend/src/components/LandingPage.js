@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ fontFamily: 'roboto' }}>
       <div className=" flex justify-center text-center mt-5 mb-3">
         <img src={logo} alt="UNICEF Logo" className="h-10" />
         <h1 className="text-4xl font-bold text-gray-800">

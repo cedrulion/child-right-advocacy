@@ -19,6 +19,7 @@ import PostFeed from './components/PostFeed';
 import WelcomeUser from './components/WelcomeUser';
 import AdvocacyPage from './components/AdvocacyPage';
 import ResourceManagement from './components/ResourceManagement';
+import CaseManagement from './components/CaseManagement';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route  path="advocacy" element={<AdvocacyPage/>} />
           <Route  path="discussion" element={<DiscussionsForums/>} />
           <Route  path="resourcema" element={<ResourceManagement/>} />
+          <Route  path="casema" element={<CaseManagement/>} />
           </Route> 
         </Routes>
     </Router>

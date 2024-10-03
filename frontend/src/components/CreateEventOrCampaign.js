@@ -42,7 +42,7 @@ const CreateEventOrCampaign = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center" style={{ fontFamily: 'roboto' }}>
       <div className="flex justify-center text-center mt-5 mb-3">
         <img src={logo} alt="UNICEF Logo" className="h-10" />
         <h1 className="text-4xl font-bold text-gray-800">
@@ -76,8 +76,8 @@ const CreateEventOrCampaign = () => {
             required
           >
             <option value="">Choose</option>
-            <option value="Type1">Meeting Type 1</option>
-            <option value="Type2">Meeting Type 2</option>
+            <option value="Online">Online</option>
+            <option value="Onsite">Onsite</option>
           </select>
 
           <input

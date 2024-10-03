@@ -30,11 +30,11 @@ const Sidebar = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed top-0 bottom-0 left-0 w-60 bg-blue-500 text-white shadow-lg z-50 font-sans">
+    <div className="fixed top-0 bottom-0 left-0 w-60 bg-blue-500 text-white shadow-lg z-50 " style={{ fontFamily: 'roboto' }}>
       {/* User Info Section */}
       <div className=" flex p-5 bg-blue-500 text-white text-center">
     <div className="bg-gray-300 rounded-full w-30 h-9 flex items-center justify-center">
-       <FaUser className="text-gray-700 text-xl" />
+       <FaUser className="text-gray-700 text-xl mx-2" />
     </div>
         <div>
         <span className="font-semibold block">{loggedInUser?.username}</span>
@@ -129,6 +129,16 @@ const Sidebar = ({ onClose }) => {
             >
               <FaHome className="mr-3" />
               Manage Users
+            </Link>
+            <Link
+              to="/dashboard/casema"
+              onClick={() => handleItemClick('/dashboard/casema')}
+              className={`flex items-center p-3 mb-2 rounded-md ${
+                activeItem === '/dashboard/casema' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+              } transition duration-150`}
+            >
+              <FaEnvelope className="mr-3" />
+              Case Management
             </Link>
             <Link
               to="/dashboard/resourcema"

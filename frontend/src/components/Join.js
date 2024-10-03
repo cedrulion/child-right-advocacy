@@ -5,7 +5,7 @@ import logo from '../Assets/unicef_logo.png';
 
 const Join = () => {
   return (
-    <div className="min-h-screen flex flex-col justify-center  p-9">
+    <div className="min-h-screen flex flex-col justify-center  p-9" style={{ fontFamily: 'roboto' }}>
       {/* UNICEF Logo and Title Section */}
       <div className="text-left">
         <div className="mb-4">

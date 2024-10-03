@@ -29,7 +29,7 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="">
+    <div className="" style={{ fontFamily: 'roboto' }}>
       {isSidebarOpen && <Sidebar onClose={toggleSidebar} />}
 
       <div className={`flex-grow ${isSidebarOpen ? 'ml-56' : 'ml-0'}`}>

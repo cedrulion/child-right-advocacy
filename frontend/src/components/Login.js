@@ -47,7 +47,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6" style={{ fontFamily: 'roboto' }}>
       <div className="w-full max-w-md p-8 rounded-lg shadow-lg">
         {/* UNICEF Logo */}
         <div className="flex justify-center mb-6">
@@ -115,7 +115,7 @@ const Login = () => {
           {/* Already have an account */}
           <p className="text-sm text-center mt-4 text-white">
             Already have an account?{' '}
-            <a href="/login" className="text-white hover:underline">
+            <a href="/signup" className="text-white hover:underline">
               SignUp
             </a>
           </p>
