@@ -15,11 +15,13 @@ import Resource from './components/Resource';
 import CompaignManagement from './components/CompaignManagement'; 
 import CreateEventOrCampaign from './components/CreateEventOrCampaign';
 import DiscussionsForums from './components/DiscussionsForums';
+import Discussions from './components/Discussions';
 import PostFeed from './components/PostFeed';
 import WelcomeUser from './components/WelcomeUser';
 import AdvocacyPage from './components/AdvocacyPage';
 import ResourceManagement from './components/ResourceManagement';
 import CaseManagement from './components/CaseManagement';
+import UserManagement from './components/UserManagement';
 
 function App() {
   return (
@@ -38,15 +40,17 @@ function App() {
           <Route  path="postfeed" element={<PostFeed/>} />
           <Route  path="eventm" element={<CreateEventOrCampaign/>} />
           <Route  path="profile" element={<ProfilePage/>} />
-          <Route  path="resource" element={<Resource/>} />
+          <Route  path="resources" element={<Resource/>} />
           <Route  path="case" element={<Case/>} />
-          <Route  path="compaignm" element={<CompaignManagement/>} />
+          <Route  path="campaignm" element={<CompaignManagement/>} />
           <Route  path="message" element={<Message/>} />
           <Route  path="welcome" element={<WelcomeUser/>} />
           <Route  path="advocacy" element={<AdvocacyPage/>} />
           <Route  path="discussion" element={<DiscussionsForums/>} />
+          <Route  path="discussions" element={<Discussions/>} />
           <Route  path="resourcema" element={<ResourceManagement/>} />
           <Route  path="casema" element={<CaseManagement/>} />
+          <Route  path="listuser" element={<UserManagement/>} />
           </Route> 
         </Routes>
     </Router>

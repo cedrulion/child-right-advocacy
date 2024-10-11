@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FaComment, FaRetweet, FaHeart } from 'react-icons/fa'; // Importing icons
 import logo from '../Assets/unicef_logo.png'; // Replace with your logo path
 
 const PostFeed = () => {
@@ -7,6 +8,9 @@ const PostFeed = () => {
   const [newPost, setNewPost] = useState('');
   const [selectedFile, setSelectedFile] = useState(null); // For media uploads (image or video)
   const [mediaType, setMediaType] = useState('text'); // Default type is text
+  const [selectedPost, setSelectedPost] = useState(null); // To handle comment modal
+  const [newComment, setNewComment] = useState(''); // Comment text
+  const [likes, setLikes] = useState({}); // To track likes for posts
 
   const token = localStorage.getItem('token'); // Get token from localStorage
 
@@ -18,7 +22,7 @@ const PostFeed = () => {
   const fetchPosts = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/posts', {
-        headers: { Authorization: `Bearer ${token}` }, // Send token with the request
+        headers: { Authorization: `Bearer ${token}` },
       });
       setPosts(response.data);
     } catch (error) {
@@ -56,6 +60,38 @@ const PostFeed = () => {
     }
   };
 
+  // Handle like functionality
+  const handleLike = async (postId) => {
+    try {
+      const response = await axios.post(`http://localhost:5000/api/posts/${postId}/like`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setLikes({ ...likes, [postId]: response.data.likes });
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
+
+  // Handle comment submission
+  const handleComment = async () => {
+    if (newComment.trim() === '') return;
+
+    try {
+      await axios.post(
+        `http://localhost:5000/api/posts/${selectedPost._id}/comment`,
+        { content: newComment },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setNewComment('');
+      setSelectedPost(null); // Close the modal after comment
+      fetchPosts(); // Refresh posts to show new comments
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white mt-5" style={{ fontFamily: 'roboto' }}>
       {/* Header */}
@@ -76,22 +112,15 @@ const PostFeed = () => {
         ></textarea>
 
         <div className="flex justify-between items-center mt-3">
-          <div className="flex space-x-4">
-            {/* File input for media */}
-            <input
-              type="file"
-              accept="image/*,video/*"
-              onChange={(e) => {
-                setSelectedFile(e.target.files[0]);
-                setMediaType(e.target.files[0]?.type.startsWith('image') ? 'image' : 'video');
-              }}
-            />
-          </div>
-
-          <button
-            onClick={handlePost}
-            className="bg-black text-white px-4 py-2 rounded-full"
-          >
+          <input
+            type="file"
+            accept="image/*,video/*"
+            onChange={(e) => {
+              setSelectedFile(e.target.files[0]);
+              setMediaType(e.target.files[0]?.type.startsWith('image') ? 'image' : 'video');
+            }}
+          />
+          <button onClick={handlePost} className="bg-black text-white px-4 py-2 rounded-full">
             Post
           </button>
         </div>
@@ -103,29 +132,72 @@ const PostFeed = () => {
           <div key={post._id} className="p-4 mb-4 bg-gray-100 rounded-lg shadow-md">
             <div className="flex items-center">
               <h3 className="font-bold">{post.author?.username || 'Anonymous'}</h3>
-              <span className="ml-2 text-gray-500 text-sm">{new Date(post.createdAt).toLocaleString()}</span>
+              <span className="ml-2 text-sm">{new Date(post.createdAt).toLocaleString()}</span>
             </div>
 
             <p className="mt-2">{post.content}</p>
 
             {/* Display media if available */}
-            {post.mediaType === 'image' && <img src={`http://localhost:5000/api/media/${post.media}`} alt="Post media" className="mt-4" />}
-            {post.mediaType === 'video' && <video controls src={`http://localhost:5000/api/media/${post.media}`} className="mt-4" />}
+            {post.mediaType === 'image' && (
+              <img
+                src={`http://localhost:5000/api/media/${post.media}`}
+                alt="Post media"
+                className="mt-4 rounded-lg"
+              />
+            )}
+            {post.mediaType === 'video' && (
+              <video controls src={`http://localhost:5000/api/media/${post.media}`} className="mt-4 rounded-lg" />
+            )}
 
-            <div className="flex space-x-4 mt-3 text-gray-500">
-              <button className="hover:text-black">
-                <i className="fas fa-comment"></i>
+            <div className="flex space-x-4 mt-3 text-gray-800">
+              <button onClick={() => setSelectedPost(post)} className="hover:text-black">
+                <FaComment />
+                <span className="ml-2">{likes[post._id] || post.comments?.length || 0}</span>
               </button>
               <button className="hover:text-black">
-                <i className="fas fa-retweet"></i>
+                <FaRetweet />
               </button>
-              <button className="hover:text-black">
-                <i className="fas fa-heart"></i>
+              <button onClick={() => handleLike(post._id)} className="hover:text-black">
+                <FaHeart />
+                <span className="ml-2">{likes[post._id] || post.likes?.length || 0}</span>
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Comment Modal */}
+      {selectedPost && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+            <h2 className="text-2xl font-bold mb-4">Comments for {selectedPost.author?.username}'s Post</h2>
+
+            {selectedPost.comments?.map((comment, index) => (
+              <div key={index} className="border-b pb-2 mb-2">
+                <p className="font-bold">{comment.userId.username}</p>
+                <p className="text-gray-600">{comment.content}</p>
+              </div>
+            ))}
+
+            <textarea
+              className="w-full p-2 border rounded mb-4"
+              placeholder="Add a comment..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            ></textarea>
+
+            <button onClick={handleComment} className="bg-blue-500 text-white px-4 py-2 rounded-lg">
+              Submit Comment
+            </button>
+            <button
+              onClick={() => setSelectedPost(null)}
+              className="ml-4 bg-gray-300 text-black px-4 py-2 rounded-lg"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

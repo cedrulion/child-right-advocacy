@@ -93,16 +93,16 @@ const Message = () => {
   };
 
   return (
-    <div className="" style={{ fontFamily: 'roboto' }}>
+    <div className="rounded" style={{ fontFamily: 'roboto' }}>
         <div className=" flex justify-center text-center mt-5 mb-3">
         <img src={logo} alt="UNICEF Logo" className="h-10" />
         <h1 className="text-4xl font-bold text-gray-800">
           Child Rights <span className="text-blue-400">ADVOCACY</span>
         </h1>
       </div>
-      <div className="m-5 rounded-lg h-screen flex">
+      <div className="m-5 rounded h-screen flex">
       <div className="h-full w-1/4 bg-blue-500 shadow-lg rounded-l-lg">
-        <div className="p-4 bg-blue-300 text-white flex justify-between items-center">
+        <div className="p-4 bg-blue-500 text-white flex justify-between items-center">
           <h2 className="text-xl font-bold">Message Tools</h2>
           <button className="text-sm px-3 py-1 bg-blue-700 rounded-lg" onClick={toggleClientView}>
             {viewingNewClients ? 'Back' : 'New'}
@@ -122,9 +122,9 @@ const Message = () => {
                 }`}
                 onClick={() => setSelectedClient(client._id)}
               >
-                <FaUserCircle className="text-2xl mr-2" />
+                <FaUserCircle className="text-2xl mr-2 text-black" />
                 <div>
-                  <p className="font-semibold">{client.username}</p>
+                  <p className="font-semibold text-black">{client.username}</p>
                   <p className="text-sm text-gray-500">Status: {client.status || 'Offline'}</p>
                 </div>
               </div>
@@ -179,9 +179,9 @@ const Message = () => {
                   }`}
                 >
                   <div
-                    className={`p-3 rounded-lg shadow-md ${
+                    className={`p-3 rounded-lg shadow-md font-semibold ${
                       msg.sender === currentUser._id
-                        ? 'bg-white text-gray-800'
+                        ? 'bg-yellow-200 text-gray-800'
                         : 'bg-gray-500 text-white'
                     }`}
                   >
@@ -209,7 +209,7 @@ const Message = () => {
             </div>
           </>
         ) : (
-          <div className="flex items-center justify-center h-full text-gray-600">
+          <div className="flex items-center justify-center h-full text-gray-600 border border-gray-300">
             <p>Select a client to start chatting</p>
           </div>
         )}

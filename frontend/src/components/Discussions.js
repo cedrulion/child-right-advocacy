@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from '../Assets/unicef_logo.png';
 
-const DiscussionsForums = () => {
+const Discussions = () => {
   const [discussions, setDiscussions] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState('Create'); // 'Create' or 'Update'
-  const [currentDiscussion, setCurrentDiscussion] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('Theme');
@@ -31,25 +29,12 @@ const DiscussionsForums = () => {
     fetchDiscussions();
   }, []);
 
-  const handleOpenModal = (mode, discussion = null) => {
-    setModalMode(mode);
-    setCurrentDiscussion(discussion);
-    if (discussion) {
-      setTitle(discussion.title);
-      setDescription(discussion.description);
-      setType(discussion.type);
-      if (discussion.type === 'Theme') {
-        setHashtag(discussion.hashtag);
-      } else {
-        setLink(discussion.link);
-      }
-    } else {
-      setTitle('');
-      setDescription('');
-      setType('Theme');
-      setHashtag('');
-      setLink('');
-    }
+  const handleOpenModal = () => {
+    setTitle('');
+    setDescription('');
+    setType('Theme');
+    setHashtag('');
+    setLink('');
     setShowModal(true);
   };
 
@@ -57,65 +42,43 @@ const DiscussionsForums = () => {
     setShowModal(false);
   };
 
-  const createOrUpdateDiscussion = async () => {
+  const createDiscussion = async () => {
     try {
       const token = localStorage.getItem('token');
       const discussionData = { title, description, type, hashtag, link };
 
-      if (modalMode === 'Create') {
-        await axios.post('http://localhost:5000/api/discussions', discussionData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } else if (modalMode === 'Update') {
-        await axios.put(`http://localhost:5000/api/discussions/${currentDiscussion._id}`, discussionData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-
-      fetchDiscussions();
-      handleCloseModal();
-    } catch (error) {
-      console.error(`Error ${modalMode.toLowerCase()} discussion:`, error);
-    }
-  };
-
-  const deleteDiscussion = async (id) => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/discussions/${id}`, {
+      await axios.post('http://localhost:5000/api/discussions', discussionData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       fetchDiscussions();
+      handleCloseModal();
     } catch (error) {
-      console.error('Error deleting discussion:', error);
+      console.error('Error creating discussion:', error);
     }
   };
-const attendForum = async (id) => {
-  if (!id) {
-    console.error('Invalid discussion ID:', id);
-    alert('Invalid discussion ID.');
-    return;
-  }
 
-  try {
-    const token = localStorage.getItem('token');
-    await axios.post(`http://localhost:5000/api/discussions/${id}/attend`, {}, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    alert('You are now attending this forum!');
-  } catch (error) {
-    console.error('Error attending forum:', error);
-  }
-};
+  const attendForum = async (id) => {
+    if (!id) {
+      console.error('Invalid discussion ID:', id);
+      alert('Invalid discussion ID.');
+      return;
+    }
 
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`http://localhost:5000/api/discussions/${id}/attend`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert('You are now attending this forum!');
+    } catch (error) {
+      console.error('Error attending forum:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'roboto' }}>
@@ -150,25 +113,13 @@ const attendForum = async (id) => {
                     <span>Theme by {discussion.userId.username}</span>
                   </div>
                   <span className="ml-2 text-sm">{new Date(discussion.createdAt).toLocaleString()}</span>
-                  <button
-                    onClick={() => handleOpenModal('Update', discussion)}
-                    className="bg-yellow-600 text-white py-1 px-4 rounded"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => deleteDiscussion(discussion._id)}
-                    className="bg-red-600 text-white py-1 px-4 rounded ml-2"
-                  >
-                    Delete
-                  </button>
                 </div>
               ))}
           </div>
           {/* Add New Theme Button */}
           <div className="flex justify-center mt-4">
             <button
-              onClick={() => handleOpenModal('Create')}
+              onClick={handleOpenModal}
               className="bg-gray-400 text-white rounded-full w-10 h-10 flex items-center justify-center"
             >
               +
@@ -203,25 +154,13 @@ const attendForum = async (id) => {
                     </span>
                     <span className="text-sm text-gray-300 underline">{discussion.link}</span>
                   </button>
-                  <button
-                    onClick={() => handleOpenModal('Update', discussion)}
-                    className="bg-yellow-600 text-white py-1 px-4 rounded"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => deleteDiscussion(discussion._id)}
-                    className="bg-red-600 text-white py-1 px-4 rounded ml-2"
-                  >
-                    Delete
-                  </button>
                 </div>
               ))}
           </div>
           {/* Add New Forum Button */}
           <div className="flex justify-center mt-4">
             <button
-              onClick={() => handleOpenModal('Create')}
+              onClick={handleOpenModal}
               className="bg-gray-400 text-white rounded-full w-10 h-10 flex items-center justify-center"
             >
               +
@@ -230,13 +169,11 @@ const attendForum = async (id) => {
         </div>
       </div>
 
-      {/* Modal for Create/Update */}
+      {/* Modal for Create */}
       {showModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
-            <h2 className="text-xl font-bold mb-4">
-              {modalMode === 'Create' ? 'Create New Discussion' : 'Update Discussion'}
-            </h2>
+            <h2 className="text-xl font-bold mb-4">Create New Discussion</h2>
 
             <div className="mb-4">
               <label className="block text-gray-700">Title</label>
@@ -299,10 +236,10 @@ const attendForum = async (id) => {
                 Cancel
               </button>
               <button
-                onClick={createOrUpdateDiscussion}
+                onClick={createDiscussion}
                 className="bg-blue-500 text-white py-2 px-4 rounded"
               >
-                {modalMode === 'Create' ? 'Create' : 'Update'}
+                Create
               </button>
             </div>
           </div>
@@ -312,4 +249,4 @@ const attendForum = async (id) => {
   );
 };
 
-export default DiscussionsForums;
+export default Discussions;

@@ -41,11 +41,13 @@ const caseRoutes = require('./routes/caseRoutes');
 const postRoutes = require('./routes/postRoutes');
 const resourceRoutes = require('./routes/resourceRoutes');
 const eventOrCampaignRoutes = require('./routes/eventOrCampaignRoutes');
+const discussionRoutes = require('./routes/discussionRoutes');
 app.use('/api', eventOrCampaignRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', messageRoutes);
 app.use('/api', caseRoutes);
 app.use('/api', postRoutes); 
+app.use('/api', discussionRoutes); 
 app.use('/api/resources', resourceRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

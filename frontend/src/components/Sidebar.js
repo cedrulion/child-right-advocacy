@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FaHome, FaReceipt, FaCalendarAlt, FaUserTie, FaEnvelope, FaSignOutAlt, FaUser} from 'react-icons/fa';
+import { 
+  FaHome, FaReceipt, FaCalendarAlt, FaUserTie, FaEnvelope, FaPlus,
+  FaSignOutAlt, FaUser, FaComments, FaFileAlt, FaGavel, FaBullhorn 
+} from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ onClose }) => {
@@ -25,20 +28,19 @@ const Sidebar = ({ onClose }) => {
   };
 
   const handleLogout = () => {
-    // Implement logout logic here
-    navigate('/login');
+    navigate('/join');
   };
 
   return (
-    <div className="fixed top-0 bottom-0 left-0 w-60 bg-blue-500 text-white shadow-lg z-50 " style={{ fontFamily: 'roboto' }}>
+    <div className="fixed top-0 bottom-0 left-0 w-60 bg-gradient-to-r from-blue-600  to-blue-500 text-white shadow-lg z-50" style={{ fontFamily: 'roboto' }}>
       {/* User Info Section */}
-      <div className=" flex p-5 bg-blue-500 text-white text-center">
-    <div className="bg-gray-300 rounded-full w-30 h-9 flex items-center justify-center">
-       <FaUser className="text-gray-700 text-xl mx-2" />
-    </div>
+      <div className="flex p-3 bg-gradient-to-r from-blue-600  to-blue-500  to-gray-950 text-white text-center">
+        <div className="bg-gray-300 rounded-full w-30 h-9 flex items-center justify-center">
+          <FaUser className="text-gray-700 text-xl mx-2" />
+        </div>
         <div>
-        <span className="font-semibold block">{loggedInUser?.username}</span>
-        <span className="text-sm block">{loggedInUser?.email}</span>
+          <span className="font-semibold block">{loggedInUser?.username}</span>
+          <span className="text-sm block">{loggedInUser?.email}</span>
         </div>
       </div>
 
@@ -77,23 +79,23 @@ const Sidebar = ({ onClose }) => {
               Messages
             </Link>
             <Link
-              to="/dashboard/discussion"
-              onClick={() => handleItemClick('/dashboard/discussion')}
+              to="/dashboard/discussions"
+              onClick={() => handleItemClick('/dashboard/discussions')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/discussion' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/discussions' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
-              <FaEnvelope className="mr-3" />
-              	Discussions
+              <FaComments className="mr-3" />
+              Discussions
             </Link>
             <Link
-              to="/dashboard/eventm"
-              onClick={() => handleItemClick('/dashboard/eventm')}
+              to="/dashboard/resources"
+              onClick={() => handleItemClick('/dashboard/resources')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/eventm' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/resources' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
-              <FaEnvelope className="mr-3" />
+              <FaFileAlt className="mr-3" />
               Resources
             </Link>
             <Link
@@ -103,21 +105,32 @@ const Sidebar = ({ onClose }) => {
                 activeItem === '/dashboard/case' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
-              <FaEnvelope className="mr-3" />
+              <FaGavel className="mr-3" />
               Cases
             </Link>
             <Link
-              to="/dashboard/compaignm"
-              onClick={() => handleItemClick('/dashboard/compaignm')}
+              to="/dashboard/advocacy"
+              onClick={() => handleItemClick('/dashboard/advocacy')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/compaignm' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/advocacy' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
-              <FaEnvelope className="mr-3" />
-              Compaigns
+              <FaBullhorn className="mr-3" />
+              Campaigns
+            </Link>
+            <Link
+              to="/dashboard/discussion"
+              onClick={() => handleItemClick('/dashboard/discussion')}
+              className={`flex items-center p-3 mb-2 rounded-md ${
+                activeItem === '/dashboard/discussion' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+              } transition duration-150`}
+            >
+              <FaComments className="mr-3" />
+              My Discussions
             </Link>
           </>
         )}
+
         {userRole === 'ADMIN' && (
           <>
             <Link
@@ -137,7 +150,7 @@ const Sidebar = ({ onClose }) => {
                 activeItem === '/dashboard/casema' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
-              <FaEnvelope className="mr-3" />
+              <FaGavel className="mr-3" />
               Case Management
             </Link>
             <Link
@@ -147,8 +160,28 @@ const Sidebar = ({ onClose }) => {
                 activeItem === '/dashboard/resourcema' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
-              <FaHome className="mr-3" />
+              <FaFileAlt className="mr-3" />
               Manage Resources
+            </Link>
+            <Link
+              to="/dashboard/campaignm"
+              onClick={() => handleItemClick('/dashboard/campaignm')}
+              className={`flex items-center p-3 mb-2 rounded-md ${
+                activeItem === '/dashboard/campaignm' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+              } transition duration-150`}
+            >
+              <FaBullhorn className="mr-3" />
+              Campaigns
+            </Link>
+            <Link
+              to="/dashboard/eventm"
+              onClick={() => handleItemClick('/dashboard/eventm')}
+              className={`flex items-center p-3 mb-2 rounded-md ${
+                activeItem === '/dashboard/eventm' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+              } transition duration-150`}
+            >
+              <FaPlus className="mr-3" />
+               Campaigns or events
             </Link>
             <Link
               to="/dashboard/statistics"

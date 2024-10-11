@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import logo from '../Assets/unicef_logo.png'; // Adjust this import to your logo
+import { FaEdit, FaTrash, FaFileAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa'; 
+import logo from '../Assets/unicef_logo.png'; 
 
 const ResourceManagement = () => {
   const [resources, setResources] = useState([]);
@@ -11,10 +12,11 @@ const ResourceManagement = () => {
   });
   const [editingResource, setEditingResource] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resourcesPerPage] = useState(5); // Number of resources per page
 
   const token = localStorage.getItem('token');
 
-  // Fetch all resources when the component loads
   useEffect(() => {
     const fetchResources = async () => {
       try {
@@ -30,18 +32,15 @@ const ResourceManagement = () => {
     fetchResources();
   }, [token]);
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle file upload changes
   const handleFileChange = (e) => {
     setFormData({ ...formData, file: e.target.files[0] });
   };
 
-  // Add new resource
   const handleAddResource = async (e) => {
     e.preventDefault();
     const formDataToSubmit = new FormData();
@@ -62,7 +61,6 @@ const ResourceManagement = () => {
     }
   };
 
-  // Handle edit resource
   const handleEditResource = (resource) => {
     setFormData({
       title: resource.title,
@@ -72,7 +70,7 @@ const ResourceManagement = () => {
     setIsEditing(true);
   };
 
-  // Update existing resource
+ 
   const handleUpdateResource = async (e) => {
     e.preventDefault();
     const formDataToSubmit = new FormData();
@@ -101,8 +99,6 @@ const ResourceManagement = () => {
       console.error('Error updating resource:', error);
     }
   };
-
-  // Delete a resource
   const handleDeleteResource = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/resources/${id}`, {
@@ -114,17 +110,30 @@ const ResourceManagement = () => {
     }
   };
 
+  const indexOfLastResource = currentPage * resourcesPerPage;
+  const indexOfFirstResource = indexOfLastResource - resourcesPerPage;
+  const currentResources = resources.slice(indexOfFirstResource, indexOfLastResource);
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(resources.length / resourcesPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="min-h-screen p-5 bg-gray-100" style={{ fontFamily: 'roboto' }}>
-      {/* Header */}
       <div className="flex justify-center mb-5">
         <img src={logo} alt="UNICEF Logo" className="h-10" />
         <h1 className="text-4xl font-bold text-gray-800">
           Child Rights <span className="text-blue-400">ADVOCACY</span>
         </h1>
       </div>
-
-      {/* Form */}
       <div className="max-w-3xl mx-auto bg-white p-6 shadow-md rounded-lg mb-6">
         <h2 className="text-xl font-bold mb-4">{isEditing ? 'Edit Resource' : 'Add New Resource'}</h2>
         <form onSubmit={isEditing ? handleUpdateResource : handleAddResource}>
@@ -166,8 +175,6 @@ const ResourceManagement = () => {
           </button>
         </form>
       </div>
-
-      {/* Resource List */}
       <div className="max-w-4xl mx-auto bg-white p-6 shadow-md rounded-lg">
         <h2 className="text-2xl font-bold mb-4">Resources</h2>
         <table className="min-w-full table-auto">
@@ -180,8 +187,8 @@ const ResourceManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {resources.map((resource) => (
-              <tr key={resource._id} className="border-b">
+            {currentResources.map((resource) => (
+              <tr key={resource._id} className="border-b hover:bg-gray-100 transition duration-200">
                 <td className="px-4 py-2">{resource.title}</td>
                 <td className="px-4 py-2">{resource.description}</td>
                 <td className="px-4 py-2">
@@ -191,27 +198,43 @@ const ResourceManagement = () => {
                     rel="noopener noreferrer"
                     className="text-blue-500 hover:underline"
                   >
-                    View File
+                    <FaFileAlt className="inline mr-2" /> View File
                   </a>
                 </td>
                 <td className="px-4 py-2">
                   <button
-                    className="text-blue-500 hover:text-blue-700 mr-3"
+                    className="text-green-500 hover:text-green-700 mr-3"
                     onClick={() => handleEditResource(resource)}
                   >
-                    Edit
+                    <FaEdit />
                   </button>
                   <button
                     className="text-red-500 hover:text-red-700"
                     onClick={() => handleDeleteResource(resource._id)}
                   >
-                    Delete
+                    <FaTrash />
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="mt-4 flex justify-between">
+          <button
+            className={`px-4 py-2 bg-gray-300 text-gray-700 rounded-lg ${currentPage === 1 ? 'cursor-not-allowed' : 'hover:bg-gray-400'}`}
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            <FaChevronLeft className="inline mr-2" /> Previous
+          </button>
+          <button
+            className={`px-4 py-2 bg-gray-300 text-gray-700 rounded-lg ${currentPage === Math.ceil(resources.length / resourcesPerPage) ? 'cursor-not-allowed' : 'hover:bg-gray-400'}`}
+            onClick={handleNextPage}
+            disabled={currentPage === Math.ceil(resources.length / resourcesPerPage)}
+          >
+            Next <FaChevronRight className="inline ml-2" />
+          </button>
+        </div>
       </div>
     </div>
   );

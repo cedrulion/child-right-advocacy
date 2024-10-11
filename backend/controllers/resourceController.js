@@ -20,9 +20,9 @@ const addResource = async (req, res) => {
     });
 
     await newResource.save();
-    res.status(201).json({ message: 'Resource uploaded successfully', newResource });
+    return res.status(201).json({ message: 'Resource uploaded successfully', newResource });
   } catch (error) {
-    res.status(500).json({ message: 'Error uploading resource', error });
+    return res.status(500).json({ message: 'Error uploading resource', error });
   }
 };
 
@@ -30,9 +30,9 @@ const addResource = async (req, res) => {
 const getAllResources = async (req, res) => {
   try {
     const resources = await Resource.find();
-    res.status(200).json(resources);
+    return res.status(200).json(resources);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching resources', error });
+    return res.status(500).json({ message: 'Error fetching resources', error });
   }
 };
 
@@ -43,9 +43,9 @@ const getResourceById = async (req, res) => {
     if (!resource) {
       return res.status(404).json({ message: 'Resource not found' });
     }
-    res.status(200).json(resource);
+    return res.status(200).json(resource);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching resource', error });
+    return res.status(500).json({ message: 'Error fetching resource', error });
   }
 };
 
@@ -67,9 +67,9 @@ const updateResource = async (req, res) => {
       return res.status(404).json({ message: 'Resource not found' });
     }
 
-    res.status(200).json({ message: 'Resource updated successfully', updatedResource });
+    return res.status(200).json({ message: 'Resource updated successfully', updatedResource });
   } catch (error) {
-    res.status(500).json({ message: 'Error updating resource', error });
+    return res.status(500).json({ message: 'Error updating resource', error });
   }
 };
 
@@ -82,18 +82,18 @@ const deleteResource = async (req, res) => {
     }
 
     const filePath = path.join(__dirname, '../uploads/', resource.file);
-    
+
     // Remove file from uploads folder
-    fs.unlink(filePath, (err) => {
+    fs.unlink(filePath, async (err) => {
       if (err) {
         return res.status(500).json({ message: 'Error deleting file', err });
       }
-    });
 
-    await Resource.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Resource deleted successfully' });
+      await Resource.findByIdAndDelete(req.params.id);
+      return res.status(200).json({ message: 'Resource deleted successfully' });
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting resource', error });
+    return res.status(500).json({ message: 'Error deleting resource', error });
   }
 };
 
@@ -104,7 +104,7 @@ const getFile = (req, res) => {
 
   res.sendFile(filePath, (err) => {
     if (err) {
-      res.status(404).json({ message: 'File not found' });
+      return res.status(404).json({ message: 'File not found' });
     }
   });
 };

@@ -36,7 +36,7 @@ const Alogin = () => {
         if (loggedInUser.role === 'USER') {
           navigate('/dashboard/postfeed');
         } else if (loggedInUser.role === 'ADMIN') {
-          navigate('/dashboard/postfeed');
+          navigate('/dashboard/listuser');
         } else {
           navigate('/dashboard/postfeed'); 
         }

@@ -7,17 +7,47 @@ const postSchema = new mongoose.Schema({
     required: true,
   },
   content: {
-    type: String, // Text content
+    type: String, 
     required: true,
   },
   media: {
-    type: String, // Path to the image or video file
+    type: String, 
   },
   mediaType: {
-    type: String, // Type of media, can be 'image', 'video', or 'text'
+    type: String, 
     enum: ['image', 'video', 'text'],
     default: 'text',
   },
+  likes: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      likedAt: {
+        type: Date,
+        default: Date.now,
+      }
+    }
+  ],
+  comments: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      content: {
+        type: String,
+        required: true,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      }
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

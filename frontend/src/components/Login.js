@@ -37,7 +37,7 @@ const Login = () => {
         if (loggedInUser.role === 'USER') {
           navigate('/dashboard/welcome');
         } else if (loggedInUser.role === 'ADMIN') {
-          navigate('/dashboard/postfeed');
+          navigate('/dashboard/reserve');
         } else {
           navigate('/dashboard/welcome'); 
         }

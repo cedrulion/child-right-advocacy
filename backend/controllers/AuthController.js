@@ -72,6 +72,21 @@ exports.getProfile = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// Get One User by ID
+exports.getOne = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId) return res.status(400).json({ error: 'User ID is required' });
+
+    const user = await User.findById(userId, 'firstName lastName username email phone role dateOfBirth nationality');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 // Update User Profile
 exports.updateProfile = async (req, res) => {
