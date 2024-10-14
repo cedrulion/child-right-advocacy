@@ -1,45 +1,27 @@
 import React, { useState } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet} from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { FaBars, } from 'react-icons/fa';
-
+import Lsidebar from './Lsidebar';
 
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const navigate = useNavigate();
-
-  const handleItemClick = (path) => {
-    navigate(path);
-  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(isSidebarOpen);
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleLogout = () => {
-    localStorage.clear(); // Clear localStorage on logout
-    navigate('/signin'); // Redirect to signin page
-  };
-
   return (
-    <div className="" style={{ fontFamily: 'roboto' }}>
+    <div className="flex" style={{ fontFamily: 'roboto' }}>
       {isSidebarOpen && <Sidebar onClose={toggleSidebar} />}
-
       <div className={`flex-grow ${isSidebarOpen ? 'ml-56' : 'ml-0'}`}>
         <div className='font-sans bg-white'>
-          <Outlet/>
-          </div>
-      
+          <Outlet />
+        </div>
       </div>
-      
-  
+      <div className="hidden lg:block rounded-full ">
+        <Lsidebar />
+      </div>
     </div>
   );
 };

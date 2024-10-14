@@ -22,6 +22,7 @@ import AdvocacyPage from './components/AdvocacyPage';
 import ResourceManagement from './components/ResourceManagement';
 import CaseManagement from './components/CaseManagement';
 import UserManagement from './components/UserManagement';
+import LegalDoc from './components/LegalDoc';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           <Route  path="resourcema" element={<ResourceManagement/>} />
           <Route  path="casema" element={<CaseManagement/>} />
           <Route  path="listuser" element={<UserManagement/>} />
+          <Route  path="legaldoc" element={<LegalDoc/>} />
           </Route> 
         </Routes>
     </Router>

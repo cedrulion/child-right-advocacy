@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  FaHome, FaReceipt, FaCalendarAlt, FaUserTie, FaEnvelope, FaPlus,
-  FaSignOutAlt, FaUser, FaComments, FaFileAlt, FaGavel, FaBullhorn 
+  FaHome, FaReceipt, FaUserTie, FaEnvelope, FaPlus,
+  FaSignOutAlt, FaUser, FaComments, FaFileAlt, FaGavel, FaBullhorn,FaFileContract 
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -67,6 +67,16 @@ const Sidebar = ({ onClose }) => {
             >
               <FaUserTie className="mr-3" />
               Profile
+            </Link>
+            <Link
+              to="/dashboard/legaldoc"
+              onClick={() => handleItemClick('/dashboard/legaldoc')}
+              className={`flex items-center p-3 mb-2 rounded-md ${
+                activeItem === '/dashboard/legaldoc' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+              } transition duration-150`}
+            >
+              <FaFileContract className="mr-3" />
+              Legal Documents
             </Link>
             <Link
               to="/dashboard/message"

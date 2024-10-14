@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaUserCircle, FaInbox, FaPaperPlane, FaStar, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaUserCircle, FaInbox, FaPaperPlane,} from 'react-icons/fa';
 import axios from 'axios';
 import logo from '../Assets/unicef_logo.png'; 
 
@@ -136,21 +136,6 @@ const Message = () => {
             <div className="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg">
               <FaPaperPlane className="text-white mr-2" />
               <p className="font-semibold">Sent</p>
-            </div>
-
-            <div className="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg">
-              <FaStar className="text-white mr-2" />
-              <p className="font-semibold">Favourites</p>
-            </div>
-
-            <div className="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg">
-              <FaEdit className="mr-2" />
-              <p className="font-semibold">Drafts</p>
-            </div>
-
-            <div className="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg">
-              <FaTrash className="mr-2" />
-              <p className="font-semibold">Trash</p>
             </div>
           </div>
         </div>
