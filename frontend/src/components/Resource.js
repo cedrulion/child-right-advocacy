@@ -7,9 +7,8 @@ const Resource = () => {
   const [resources, setResources] = useState([]);
   const [filteredResources, setFilteredResources] = useState([]);
 
-  const token = localStorage.getItem('token'); // For authorization headers
+  const token = localStorage.getItem('token'); 
 
-  // Fetch all resources when component mounts
   useEffect(() => {
     const fetchResources = async () => {
       try {
@@ -25,7 +24,6 @@ const Resource = () => {
     fetchResources();
   }, [token]);
 
-  // Filter resources based on the active tab
   useEffect(() => {
     const filtered = resources.filter((resource) => {
       if (activeTab === 'courses') {
@@ -88,7 +86,7 @@ const Resource = () => {
           <div className="flex justify-center flex-wrap">
             {filteredResources.map((resource) => (
               <div key={resource._id} className="w-1/4 m-4 p-4 border rounded-lg bg-white">
-                <h3 className="text-xl font-bold">{resource.title}</h3>
+                <h3 className="text-xl font-bold">{resource.name}</h3>
                 <p className="my-2">{resource.description}</p>
                 <a
                   href={`http://localhost:5000/api/resources/file/${resource.file}`}
@@ -96,7 +94,7 @@ const Resource = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  View Resource
+                  Next
                 </a>
               </div>
             ))}
@@ -133,7 +131,7 @@ const Resource = () => {
           <div className="flex justify-center flex-wrap">
             {filteredResources.map((resource) => (
               <div key={resource._id} className="w-1/4 m-4 p-4 border rounded-lg bg-white">
-                <h3 className="text-xl font-bold">{resource.title}</h3>
+                <h3 className="text-xl font-bold">{resource.name}</h3>
                 <p className="my-2">{resource.description}</p>
                 <a
                   href={`http://localhost:5000/api/resources/file/${resource.file}`}

@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import logo from '../Assets/unicef_logo.png';
 
 const DiscussionsForums = () => {
   const [discussions, setDiscussions] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState('Create'); // 'Create' or 'Update'
+  const [modalMode, setModalMode] = useState('Update');
   const [currentDiscussion, setCurrentDiscussion] = useState(null);
+  const [currentPost, setCurrentPost] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [type, setType] = useState('Theme');
-  const [hashtag, setHashtag] = useState('');
-  const [link, setLink] = useState('');
+  const [mediaType, setMediaType] = useState('');
+  const [type, setType] = useState('All');
 
+  // Fetch Discussions by user
   const fetchDiscussions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/discussions', {
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+      if (!loggedInUser || !loggedInUser._id) {
+        console.error("Logged in user information is missing or incomplete");
+        return;
+      }
+      const userId = loggedInUser._id;
+      const response = await axios.get(`http://localhost:5000/api/discussions/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -27,29 +37,46 @@ const DiscussionsForums = () => {
     }
   };
 
+  // Fetch posts by user
+  const fetchPosts = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+      if (!loggedInUser || !loggedInUser._id) {
+        console.error("Logged in user information is missing or incomplete");
+        return;
+      }
+      const userId = loggedInUser._id;
+      const response = await axios.get(`http://localhost:5000/api/posts/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+
   useEffect(() => {
     fetchDiscussions();
+    fetchPosts();
   }, []);
 
-  const handleOpenModal = (mode, discussion = null) => {
-    setModalMode(mode);
+  const handleOpenDiscussionModal = (discussion) => {
+    setModalMode('Update');
     setCurrentDiscussion(discussion);
-    if (discussion) {
-      setTitle(discussion.title);
-      setDescription(discussion.description);
-      setType(discussion.type);
-      if (discussion.type === 'Theme') {
-        setHashtag(discussion.hashtag);
-      } else {
-        setLink(discussion.link);
-      }
-    } else {
-      setTitle('');
-      setDescription('');
-      setType('Theme');
-      setHashtag('');
-      setLink('');
-    }
+    setTitle(discussion.title);
+    setDescription(discussion.description);
+    setShowModal(true);
+  };
+
+  const handleOpenPostModal = (post) => {
+    setModalMode('Update');
+    setCurrentPost(post);
+    setTitle(post.title);
+    setMediaType(post.mediaType);
     setShowModal(true);
   };
 
@@ -57,29 +84,39 @@ const DiscussionsForums = () => {
     setShowModal(false);
   };
 
-  const createOrUpdateDiscussion = async () => {
+  const updateDiscussion = async () => {
     try {
       const token = localStorage.getItem('token');
-      const discussionData = { title, description, type, hashtag, link };
+      const discussionData = { title, description };
 
-      if (modalMode === 'Create') {
-        await axios.post('http://localhost:5000/api/discussions', discussionData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } else if (modalMode === 'Update') {
-        await axios.put(`http://localhost:5000/api/discussions/${currentDiscussion._id}`, discussionData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
+      await axios.put(`http://localhost:5000/api/discussions/${currentDiscussion._id}`, discussionData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       fetchDiscussions();
       handleCloseModal();
     } catch (error) {
-      console.error(`Error ${modalMode.toLowerCase()} discussion:`, error);
+      console.error('Error updating discussion:', error);
+    }
+  };
+
+  const updatePost = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const postData = { title, mediaType };
+
+      await axios.put(`http://localhost:5000/api/posts/${currentPost._id}`, postData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      fetchPosts();
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error updating post:', error);
     }
   };
 
@@ -96,30 +133,23 @@ const DiscussionsForums = () => {
       console.error('Error deleting discussion:', error);
     }
   };
-const attendForum = async (id) => {
-  if (!id) {
-    console.error('Invalid discussion ID:', id);
-    alert('Invalid discussion ID.');
-    return;
-  }
 
-  try {
-    const token = localStorage.getItem('token');
-    await axios.post(`http://localhost:5000/api/discussions/${id}/attend`, {}, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    alert('You are now attending this forum!');
-  } catch (error) {
-    console.error('Error attending forum:', error);
-  }
-};
-
+  const deletePost = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:5000/api/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchPosts();
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'roboto' }}>
-      {/* Header Section */}
       <div className="flex justify-center text-center m-3">
         <img src={logo} alt="UNICEF Logo" className="h-10" />
         <h1 className="text-4xl font-bold text-gray-800">
@@ -127,187 +157,127 @@ const attendForum = async (id) => {
         </h1>
       </div>
 
-      {/* Discussions & Forums Section */}
       <div className="px-10 py-6">
-        <h2 className="text-xl font-bold text-gray-800 text-center mb-10">
-          DISCUSSIONS & FORUMS
-        </h2>
-
-        {/* Discussion Themes */}
-        <div className="mb-10">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">Discussion Themes</h3>
-          <div className="space-y-4">
-            {discussions
-              .filter((discussion) => discussion.type === 'Theme')
-              .map((discussion) => (
-                <div
-                  key={discussion._id}
-                  className="bg-gray-500 rounded-md p-4 flex justify-between items-center text-white text-lg"
-                >
-                  <div className="flex flex-col">
-                    <span>{discussion.title}</span>
-                    <span className="text-sm">{discussion.hashtag && `#${discussion.hashtag}`}</span>
-                    <span>Theme by {discussion.userId.username}</span>
-                  </div>
-                  <span className="ml-2 text-sm">{new Date(discussion.createdAt).toLocaleString()}</span>
-                  <button
-                    onClick={() => handleOpenModal('Update', discussion)}
-                    className="bg-yellow-600 text-white py-1 px-4 rounded"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => deleteDiscussion(discussion._id)}
-                    className="bg-red-600 text-white py-1 px-4 rounded ml-2"
-                  >
-                    Delete
-                  </button>
-                </div>
-              ))}
-          </div>
-          {/* Add New Theme Button */}
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={() => handleOpenModal('Create')}
-              className="bg-gray-400 text-white rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              +
-            </button>
-          </div>
+        <h2 className="text-xl font-bold text-gray-800 text-center mb-10">DISCUSSIONS</h2>
+        {/* Filter by Type */}
+        <div className="flex justify-end mb-4">
+          <label className="mr-2 font-semibold text-gray-700">Select Type:</label>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          >
+            <option value="All">All</option>
+            <option value="Theme">Theme</option>
+            <option value="Forum">Forum</option>
+          </select>
         </div>
 
-        {/* Discussion Forums */}
-        <div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">Discussion Forums</h3>
-          <div className="space-y-4">
+        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden mb-8">
+          <thead>
+            <tr className="bg-gray-800 text-white text-left">
+              <th className="py-3 px-4">Title</th>
+              <th className="py-3 px-4">Type</th>
+              <th className="py-3 px-4">Date</th>
+              <th className="py-3 px-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {discussions
-              .filter((discussion) => discussion.type === 'Forum')
+              .filter((discussion) => type === 'All' || discussion.type === type)
               .map((discussion) => (
-                <div
-                  key={discussion._id}
-                  className="bg-white rounded-md p-4 shadow-lg flex justify-between items-center"
-                >
-                  <div className="flex flex-col">
-                    <span>{discussion.title}</span>
-                    <span className="text-sm">{discussion.hashtag && `#${discussion.hashtag}`}</span>
-                    <span>Forum by {discussion.userId.username}</span>
-                  </div>
-                  <span className="ml-2 text-sm">{new Date(discussion.createdAt).toLocaleString()}</span>
-                  <button
-                    onClick={() => attendForum(discussion._id)}
-                    className="flex items-center justify-between bg-gray-800 text-white py-3 px-8 rounded-md shadow-lg transition duration-300 ease-in-out hover:bg-gray-700 transform hover:scale-105"
-                  >
-                    <span className="flex items-center">
-                      <span className="mr-2 text-xl">➔</span> 
-                      Click here to Attend
-                    </span>
-                    <span className="text-sm text-gray-300 underline">{discussion.link}</span>
-                  </button>
-                  <button
-                    onClick={() => handleOpenModal('Update', discussion)}
-                    className="bg-yellow-600 text-white py-1 px-4 rounded"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => deleteDiscussion(discussion._id)}
-                    className="bg-red-600 text-white py-1 px-4 rounded ml-2"
-                  >
-                    Delete
-                  </button>
-                </div>
+                <tr key={discussion._id} className="border-t hover:bg-gray-100 transition duration-150 ease-in-out">
+                  <td className="py-3 px-4">{discussion.title}</td>
+                  <td className="py-3 px-4">{discussion.type}</td>
+                  <td className="py-3 px-4">{new Date(discussion.createdAt).toLocaleString()}</td>
+                  <td className="py-3 px-4 flex space-x-4">
+                    <button onClick={() => handleOpenDiscussionModal(discussion)} className="text-blue-500 hover:text-blue-700">
+                      <FaEdit />
+                    </button>
+                    <button onClick={() => deleteDiscussion(discussion._id)} className="text-red-500 hover:text-red-700">
+                      <FaTrash />
+                    </button>
+                  </td>
+                </tr>
               ))}
+          </tbody>
+        </table>
+
+        <h2 className="text-xl font-bold text-gray-800 text-center mb-10">MY POSTS</h2>
+        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+          <thead>
+            <tr className="bg-gray-800 text-white text-left">
+              <th className="py-3 px-4">Content</th>
+              <th className="py-3 px-4">Media Type</th>
+              <th className="py-3 px-4">Likes</th>
+              <th className="py-3 px-4">Comments</th>
+              <th className="py-3 px-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map((post) => (
+              <tr key={post._id} className="border-t hover:bg-gray-100 transition duration-150 ease-in-out">
+                <td className="py-3 px-4">{post.content}</td>
+                <td className="py-3 px-4">{post.mediaType}</td>
+                <td className="py-3 px-4">{post.likes.length}</td>
+                <td className="py-3 px-4">{post.comments.length}</td>
+                <td className="py-3 px-4 flex space-x-4">
+                  <button onClick={() => handleOpenPostModal(post)} className="text-blue-500 hover:text-blue-700">
+                    <FaEdit />
+                  </button>
+                  <button onClick={() => deletePost(post._id)} className="text-red-500 hover:text-red-700">
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {showModal && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-lg font-bold mb-4">{modalMode} {modalMode === 'Update' ? 'Post' : 'Discussion'}</h2>
+              <form>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Title</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                {modalMode === 'Update Post' && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Media Type</label>
+                    <input
+                      type="text"
+                      value={mediaType}
+                      onChange={(e) => setMediaType(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                )}
+              </form>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={modalMode === 'Update' ? updateDiscussion : updatePost}
+                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCloseModal}
+                  className="ml-4 bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
-          {/* Add New Forum Button */}
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={() => handleOpenModal('Create')}
-              className="bg-gray-400 text-white rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              +
-            </button>
-          </div>
-        </div>
+        )}
       </div>
-
-      {/* Modal for Create/Update */}
-      {showModal && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
-            <h2 className="text-xl font-bold mb-4">
-              {modalMode === 'Create' ? 'Create New Discussion' : 'Update Discussion'}
-            </h2>
-
-            <div className="mb-4">
-              <label className="block text-gray-700">Title</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700">Description</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded"
-              ></textarea>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700">Type</label>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                <option value="Theme">Theme</option>
-                <option value="Forum">Forum</option>
-              </select>
-            </div>
-
-            {type === 'Theme' ? (
-              <div className="mb-4">
-                <label className="block text-gray-700">Hashtag</label>
-                <input
-                  type="text"
-                  value={hashtag}
-                  onChange={(e) => setHashtag(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              </div>
-            ) : (
-              <div className="mb-4">
-                <label className="block text-gray-700">Link</label>
-                <input
-                  type="text"
-                  value={link}
-                  onChange={(e) => setLink(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              </div>
-            )}
-
-            <div className="flex justify-end">
-              <button
-                onClick={handleCloseModal}
-                className="bg-gray-300 text-gray-700 py-2 px-4 rounded mr-2"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={createOrUpdateDiscussion}
-                className="bg-blue-500 text-white py-2 px-4 rounded"
-              >
-                {modalMode === 'Create' ? 'Create' : 'Update'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

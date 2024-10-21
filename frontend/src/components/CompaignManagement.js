@@ -8,7 +8,7 @@ const CampaignManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('Newest');
   const [activeTab, setActiveTab] = useState('Campaigns');
-  const [editCampaign, setEditCampaign] = useState(null); // New state for editing
+  const [editCampaign, setEditCampaign] = useState(null); 
   const [formData, setFormData] = useState({
     type: '',
     meetingType: '',
@@ -17,17 +17,15 @@ const CampaignManagement = () => {
     location: '',
     venue: ''
   });
-  const token = localStorage.getItem('token'); // For authorization headers
-
-  // Fetch campaigns, events, and social media posts from the API
+  const token = localStorage.getItem('token'); 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/campaign', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setData(response.data); // Set all the data at once
-        filterDataByType('Campaign'); // Initially display campaigns
+        setData(response.data); 
+        filterDataByType('Campaign'); 
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -36,11 +34,10 @@ const CampaignManagement = () => {
     fetchData();
   }, []);
 
-  // Filter data based on type (Campaigns, Events, Social Media)
   const filterDataByType = (type) => {
     const filtered = data.filter(item => item.type === type);
     setFilteredData(filtered);
-    setActiveTab(type); // Set active tab based on type
+    setActiveTab(type); 
   };
 
   // Handle tab switching (Campaigns, Events, Social Media)
@@ -48,7 +45,6 @@ const CampaignManagement = () => {
     filterDataByType(type);
   };
 
-  // Handle search
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
     const filtered = data.filter((item) =>
@@ -57,7 +53,6 @@ const CampaignManagement = () => {
     setFilteredData(filtered);
   };
 
-  // Handle sorting by createdAt date
   const handleSortChange = (e) => {
     const selectedOption = e.target.value;
     setSortOption(selectedOption);
@@ -82,7 +77,6 @@ const CampaignManagement = () => {
     }
   };
 
-  // Handle opening the edit form
   const handleEdit = (campaign) => {
     setEditCampaign(campaign._id);
     setFormData({
@@ -95,12 +89,9 @@ const CampaignManagement = () => {
     });
   };
 
-  // Handle form changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  // Handle updating a campaign
   const handleUpdate = async () => {
     try {
       const response = await axios.put(
@@ -120,6 +111,18 @@ const CampaignManagement = () => {
       alert('Failed to update campaign.');
     }
   };
+  const getStatus = (date) => {
+    const currentDate = new Date();
+    const campaignDate = new Date(date);
+
+    if (campaignDate < currentDate) {
+      return <span className="text-red-500">Passed</span>;
+    } else if (campaignDate.toDateString() === currentDate.toDateString()) {
+      return <span className="text-blue-500">Active</span>;
+    } else {
+      return <span className="text-green-500">Upcoming</span>;
+    }
+  };
 
   return (
     <div className="p-5 bg-gray-100" style={{ fontFamily: 'roboto' }}>
@@ -130,7 +133,6 @@ const CampaignManagement = () => {
         </h1>
       </div>
 
-      {/* Navigation Tabs */}
       <div className="bg-white p-5 border-b-2 flex items-center justify-center">
         <nav className="flex space-x-6">
           <button
@@ -175,8 +177,6 @@ const CampaignManagement = () => {
             </select>
           </div>
         </div>
-
-        {/* Campaign/Event/Social Media List */}
         <table className="table-auto w-full mt-6 bg-white rounded-md shadow-lg">
           <thead className="bg-gray-100">
             <tr className="text-left text-gray-600">
@@ -187,7 +187,7 @@ const CampaignManagement = () => {
               <th className="py-3 px-4">Time</th>
               <th className="py-3 px-4">Location</th>
               <th className="py-3 px-4">Venue</th>
-              <th className="py-3 px-4">Created At</th>
+              <th className="py-3 px-4">Status</th>
               <th className="py-3 px-4">Actions</th>
             </tr>
           </thead>
@@ -201,7 +201,7 @@ const CampaignManagement = () => {
                 <td className="py-3 px-4">{item.time}</td>
                 <td className="py-3 px-4">{item.location}</td>
                 <td className="py-3 px-4">{item.venue}</td>
-                <td className="py-3 px-4">{new Date(item.createdAt).toLocaleDateString()}</td>
+                <td className="py-3 px-4">{getStatus(item.date)}</td>
                 <td className="py-3 px-4">
                   <button
                     className="mr-2 text-blue-500"

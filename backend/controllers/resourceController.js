@@ -15,6 +15,7 @@ const addResource = async (req, res) => {
 
     const newResource = new Resource({
       title,
+      name,
       description,
       file,
     });
@@ -52,8 +53,8 @@ const getResourceById = async (req, res) => {
 // Update Resource (Update)
 const updateResource = async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const updatedData = { title, description };
+    const { title, name, description } = req.body;
+    const updatedData = { title, name, description };
 
     if (req.file) {
       updatedData.file = req.file.filename; // Update file if provided
@@ -72,8 +73,6 @@ const updateResource = async (req, res) => {
     return res.status(500).json({ message: 'Error updating resource', error });
   }
 };
-
-// Delete Resource (Delete)
 const deleteResource = async (req, res) => {
   try {
     const resource = await Resource.findById(req.params.id);
@@ -83,12 +82,11 @@ const deleteResource = async (req, res) => {
 
     const filePath = path.join(__dirname, '../uploads/', resource.file);
 
-    // Remove file from uploads folder
     fs.unlink(filePath, async (err) => {
       if (err) {
+        console.error('Error deleting file:', err);
         return res.status(500).json({ message: 'Error deleting file', err });
       }
-
       await Resource.findByIdAndDelete(req.params.id);
       return res.status(200).json({ message: 'Resource deleted successfully' });
     });
@@ -96,6 +94,7 @@ const deleteResource = async (req, res) => {
     return res.status(500).json({ message: 'Error deleting resource', error });
   }
 };
+
 
 // Get File (Serve file)
 const getFile = (req, res) => {

@@ -44,7 +44,7 @@ exports.createDiscussion = async (req, res) => {
 exports.updateDiscussion = async (req, res) => {
   try {
     const { title, description } = req.body;
-    let discussion = await Discussion.findById(req.params.discussionId);
+    let discussion = await Discussion.findById(req.params.id);
     if (!discussion) return res.status(404).json({ error: 'Discussion not found' });
 
     discussion.title = title || discussion.title;
@@ -60,7 +60,7 @@ exports.updateDiscussion = async (req, res) => {
 // Delete a discussion by ID
 exports.deleteDiscussion = async (req, res) => {
   try {
-    let discussion = await Discussion.findById(req.params.discussionId);
+    let discussion = await Discussion.findById(req.params.id);
     if (!discussion) return res.status(404).json({ error: 'Discussion not found' });
     await discussion.deleteOne();
     res.json({ message: 'Discussion deleted successfully' });
@@ -128,5 +128,18 @@ exports.attendDiscussion = async (req, res) => {
     res.json(discussion);
   } catch (error) {
     res.status(500).json({ error: 'Error marking attendance' });
+  }
+};
+
+exports.getDiscussionsByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const discussions = await Discussion.find({ userId }).populate('userId', 'username');
+    if (discussions.length === 0) {
+      return res.status(404).json({ error: 'No discussions found for this user' });
+    }
+    res.json(discussions);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching discussions by user' });
   }
 };

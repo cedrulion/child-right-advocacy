@@ -69,7 +69,7 @@ const ProfilePage = () => {
 
       <div className="flex flex-col p-6 bg-gray-200">
         <div className="flex items-center space-x-4">
-          <FaUser className="text-gray-700 text-4xl" />
+          <FaUser className="text-gray-700 text-4xl  p-2 bg-white rounded-full" />
           <h2 className="text-xl font-bold text-gray-800">{profile.firstName} {profile.lastName} <br></br>
          <p className="text-sm text-gray-500">@{profile.username}</p></h2>  
         </div>

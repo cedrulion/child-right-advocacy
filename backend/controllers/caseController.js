@@ -1,6 +1,4 @@
 const CaseReport = require('../models/CaseReport');
-
-// Create a new case report
 exports.createCaseReport = async (req, res) => {
   try {
     const {
@@ -35,7 +33,6 @@ exports.createCaseReport = async (req, res) => {
   }
 };
 
-// Get all case reports (admin or for overview)
 exports.getAllCaseReports = async (req, res) => {
   try {
     const caseReports = await CaseReport.find().populate('userId', 'username email');
@@ -50,7 +47,6 @@ exports.getAllCaseReports = async (req, res) => {
   }
 };
 
-// Get case reports by user ID
 exports.getCaseReportsByUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -67,7 +63,6 @@ exports.getCaseReportsByUser = async (req, res) => {
   }
 };
 
-// Get a specific case report by ID
 exports.getCaseReportById = async (req, res) => {
   try {
     const caseReport = await CaseReport.findById(req.params.id);
@@ -83,7 +78,6 @@ exports.getCaseReportById = async (req, res) => {
   }
 };
 
-// Update a case report by ID
 exports.updateCaseReport = async (req, res) => {
   try {
     const id = req.params.id;
@@ -102,7 +96,6 @@ exports.updateCaseReport = async (req, res) => {
   }
 };
 
-// Delete a case report by ID
 exports.deleteCaseReport = async (req, res) => {
   try {
 
@@ -118,3 +111,30 @@ exports.deleteCaseReport = async (req, res) => {
     res.status(500).json({ message: 'Error deleting case report', error });
   }
 };
+
+exports.updateStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { status, ...updateData } = req.body;
+
+    if (status && !['pending', 'reported'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
+
+    const updatedCaseReport = await CaseReport.findByIdAndUpdate(
+      id,
+      { ...updateData, ...(status && { status }) }, 
+      { new: true }
+    );
+
+    if (!updatedCaseReport) {
+      return res.status(404).json({ message: 'Case report not found' });
+    }
+
+    res.status(200).json({ message: 'Case report updated successfully', caseReport: updatedCaseReport });
+  } catch (error) {
+    console.error('Error updating case report:', error);
+    res.status(500).json({ message: 'Error updating case report', error });
+  }
+};
+

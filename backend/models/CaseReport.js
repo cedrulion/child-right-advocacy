@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const CaseReportSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.ObjectId, // This references the User model (assuming you have a User model)
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
@@ -52,6 +52,11 @@ const CaseReportSchema = new mongoose.Schema({
   caseSuspectAddress: {
     type: String,
     required: true,
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'reported'],
+    default: 'pending',
   },
 }, { timestamps: true });
 

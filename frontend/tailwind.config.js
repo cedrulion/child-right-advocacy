@@ -6,11 +6,12 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Arial: ['Arial', 'sans-serif'],
-        Ubuntu: ['Ubuntu', 'sans-serif'],
-        Inter: ['Inter', 'sans-serif'],
-        Roboto: ['Roboto', 'sans-serif']
-      }
+        arial: ['Arial', 'sans-serif'],
+        ubuntu: ['Ubuntu', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
+        sans: ['Nunito', 'sans-serif'],
+      },
     },
   },
   plugins: [],

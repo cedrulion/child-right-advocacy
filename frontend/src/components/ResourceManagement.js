@@ -7,6 +7,7 @@ const ResourceManagement = () => {
   const [resources, setResources] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
+    name: '',
     description: '',
     file: null,
   });
@@ -45,6 +46,7 @@ const ResourceManagement = () => {
     e.preventDefault();
     const formDataToSubmit = new FormData();
     formDataToSubmit.append('title', formData.title);
+    formDataToSubmit.append('name', formData.name);
     formDataToSubmit.append('description', formData.description);
     formDataToSubmit.append('file', formData.file);
 
@@ -75,6 +77,7 @@ const ResourceManagement = () => {
     e.preventDefault();
     const formDataToSubmit = new FormData();
     formDataToSubmit.append('title', formData.title);
+    formDataToSubmit.append('name', formData.name);
     formDataToSubmit.append('description', formData.description);
     if (formData.file) {
       formDataToSubmit.append('file', formData.file);
@@ -92,7 +95,7 @@ const ResourceManagement = () => {
         resource._id === editingResource ? response.data.updatedResource : resource
       );
       setResources(updatedResources);
-      setFormData({ title: '', description: '', file: null });
+      setFormData({ title: '', name: '', description: '', file: null });
       setEditingResource(null);
       setIsEditing(false);
     } catch (error) {
@@ -149,6 +152,17 @@ const ResourceManagement = () => {
             />
           </div>
           <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none"
+              required
+            />
+          </div>
+          <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2">Description</label>
             <textarea
               name="description"
@@ -181,6 +195,7 @@ const ResourceManagement = () => {
           <thead>
             <tr className="text-left bg-gray-200">
               <th className="px-4 py-2">Title</th>
+              <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Description</th>
               <th className="px-4 py-2">File</th>
               <th className="px-4 py-2">Actions</th>
@@ -190,6 +205,7 @@ const ResourceManagement = () => {
             {currentResources.map((resource) => (
               <tr key={resource._id} className="border-b hover:bg-gray-100 transition duration-200">
                 <td className="px-4 py-2">{resource.title}</td>
+                <td className="px-4 py-2">{resource.name}</td>
                 <td className="px-4 py-2">{resource.description}</td>
                 <td className="px-4 py-2">
                   <a

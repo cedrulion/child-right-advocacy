@@ -46,8 +46,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6" style={{ fontFamily: 'roboto' }}>
-      <div className="w-full max-w-md p-8 rounded-lg shadow-lg">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ fontFamily: 'roboto' }}>
+      <div className="w-full max-w-md p-3 rounded-lg shadow-lg">
         {/* UNICEF Logo */}
         <div className="flex justify-center mb-6">
           <img src={logo} alt="UNICEF Logo" className="h-12" />

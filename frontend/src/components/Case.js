@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import logo from '../Assets/unicef_logo.png'; // Replace with the correct path for your UNICEF logo
-
+import logo from '../Assets/unicef_logo.png'; 
 const Case = () => {
-  const [activeTab, setActiveTab] = useState('reporting'); // 'reporting' or 'emergencies'
+  const [activeTab, setActiveTab] = useState('reporting'); 
   const [formData, setFormData] = useState({
     reportAs: 'Adult',
     typeOfAbuse: 'Sexual',
@@ -19,8 +18,6 @@ const Case = () => {
   });
 
   const [ageOfAbuse, setAgeOfAbuse] = useState(16);
-
-  // Get the token from localStorage (for authenticated API requests)
   const token = localStorage.getItem('token');
 
   const handleTabSwitch = (tab) => setActiveTab(tab);
@@ -33,11 +30,11 @@ const Case = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/report',
-        formData, // Submit form data
+        'http://localhost:5000/api/reports',
+        formData, 
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include token in the headers for authorization
+            Authorization: `Bearer ${token}`, 
           },
         }
       );
@@ -60,7 +57,6 @@ const Case = () => {
           </h1>
         </div>
 
-        {/* Tab Navigation */}
         <div className="flex justify-center space-x-4 mb-6">
           <button
             onClick={() => handleTabSwitch('reporting')}
@@ -76,7 +72,6 @@ const Case = () => {
           </button>
         </div>
 
-        {/* Tab Content */}
         {activeTab === 'reporting' ? (
           <form onSubmit={handleSubmit} className="bg-white p-6 shadow-lg rounded-lg">
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -106,8 +101,6 @@ const Case = () => {
                 </select>
               </div>
             </div>
-
-            {/* Abused Child Information */}
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Abused Child Information</h3>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
@@ -141,8 +134,6 @@ const Case = () => {
                 />
               </div>
             </div>
-
-            {/* Guardian Information */}
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Guardians Information</h3>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
@@ -166,8 +157,6 @@ const Case = () => {
                 />
               </div>
             </div>
-
-            {/* Case Suspect Information */}
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Case Suspect Information</h3>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
@@ -245,8 +234,6 @@ const Case = () => {
                 </button>
               </div>
             </div>
-
-            {/* Emergency Contacts */}
             <div className="grid grid-cols-2 gap-4 text-center">
               <div>
                 <h4 className="text-lg font-bold text-gray-900">Health Emergencies</h4>

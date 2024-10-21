@@ -14,7 +14,7 @@ const LandingPage = () => {
           Child Rights <span className="text-blue-400">ADVOCACY</span>
         </h1>
       </div>
-      <div
+       <div
         className="flex-grow bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >

@@ -110,14 +110,6 @@ const Alogin = () => {
           >
             Login
           </button>
-
-          {/* Already have an account */}
-          <p className="text-sm text-center mt-4 text-white">
-            Already have an account?{' '}
-            <a href="/login" className="text-white hover:underline">
-              SignUp
-            </a>
-          </p>
         </form>
       </div>
     </div>

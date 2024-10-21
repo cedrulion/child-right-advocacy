@@ -9,6 +9,7 @@ router.get('/reports', passport.authenticate('jwt', { session: false }), caseCon
 router.get('/reports/:userId', passport.authenticate('jwt', { session: false }), caseController.getCaseReportsByUser);
 router.get('/reports/:id', caseController.getCaseReportById);
 router.put('/reports/:id',  caseController.updateCaseReport);
+router.put('/reports/:id', caseController.updateStatus);
 router.delete('/reports/:id',  caseController.deleteCaseReport);
 
 module.exports = router;

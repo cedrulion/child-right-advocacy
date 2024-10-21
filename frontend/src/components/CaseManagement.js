@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import logo from '../Assets/unicef_logo.png';
+import { EyeIcon, TrashIcon } from '@heroicons/react/solid';
 
 const CaseManagement = () => {
   const [caseReports, setCaseReports] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage] = useState(8);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab] = useState('Case'); // Assuming activeTab is 'Case'
   const [sortOption, setSortOption] = useState('Newest');
-  const token = localStorage.getItem('token'); 
+  const token = localStorage.getItem('token');
 
   const BASE_URL = 'http://localhost:5000/api';
 
   const fetchCaseReports = async () => {
-    const response = await axios.get('http://localhost:5000/api/reports', {
+    const response = await axios.get(`${BASE_URL}/reports`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setCaseReports(response.data);
@@ -24,18 +24,27 @@ const CaseManagement = () => {
     fetchCaseReports();
   }, []);
 
+  // Handler to update the case status
+  const handleStatusUpdate = async (id, currentStatus) => {
+    const newStatus = currentStatus === 'pending' ? 'reported' : 'pending';
+    await axios.put(`${BASE_URL}/reports/${id}`, { status: newStatus }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchCaseReports(); // Refresh the case reports after updating
+  };
+
   const handleDelete = async (id) => {
-    await axios.delete('http://localhost:5000/api/reports/${id}', {
+    await axios.delete(`${BASE_URL}/reports/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     fetchCaseReports();
   };
 
   const handleGetById = async (id) => {
-    const response = await axios.get('http://localhost:5000/api/reports/${id}', {
+    const response = await axios.get(`${BASE_URL}/reports/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(response.data); 
+    console.log(response.data);
   };
 
   const handleSearch = (e) => {
@@ -47,6 +56,7 @@ const CaseManagement = () => {
     setSortOption(e.target.value);
     setCurrentPage(1); // Reset to first page when sorting
   };
+
   const filteredReports = caseReports
     .filter(report =>
       report.abusedChildName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -75,7 +85,7 @@ const CaseManagement = () => {
       <div className="mt-8">
         {/* Search and Sort */}
         <div className="flex justify-between items-center mt-4">
-          <h2 className="text-2xl font-bold text-gray-800">{activeTab} Management</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Case Management</h2>
           <div className="relative">
             <input
               type="text"
@@ -106,6 +116,7 @@ const CaseManagement = () => {
               <th className="py-2 border-b">Type of Abuse</th>
               <th className="py-2 border-b">Guardian Name</th>
               <th className="py-2 border-b">Case Severity Level</th>
+              <th className="py-2 border-b">Status</th>
               <th className="py-2 border-b">Actions</th>
             </tr>
           </thead>
@@ -119,18 +130,30 @@ const CaseManagement = () => {
                 <td className="py-2 border-b">{report.reportAs}</td>
                 <td className="py-2 border-b">
                   <button
-                    onClick={() => handleGetById(report._id)} // Call get by ID
-                    className="text-blue-500 hover:text-blue-700 mr-2"
+                    onClick={() => handleStatusUpdate(report._id, report.status)}
+                    className={`px-3 py-1 rounded ${
+                      report.status === 'pending'
+                        ? 'bg-yellow-500 text-white'
+                        : 'bg-green-500 text-white'
+                    }`}
                   >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleDelete(report._id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    Delete
+                    {report.status}
                   </button>
                 </td>
+                <td className="py-2 border-b">
+                  <button
+                   onClick={() => handleGetById(report._id)}
+                    className="text-blue-500 hover:text-blue-700 mr-2"
+                    >
+                  <EyeIcon className="h-5 w-5 inline" />
+                  </button>
+                 <button
+                       onClick={() => handleDelete(report._id)}
+                       className="text-red-500 hover:text-red-700"
+                       >
+                 <TrashIcon className="h-5 w-5 inline" /> 
+              </button>
+              </td>
               </tr>
             ))}
           </tbody>

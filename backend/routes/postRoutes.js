@@ -7,6 +7,7 @@ const {
   deletePost,
   likePost,
   commentOnPost,
+  getMyPostsByUser,
   getMediaFile,
 } = require('../controllers/postController');
 const upload = require('../Middlewares/multerConfig'); 
@@ -21,5 +22,7 @@ router.delete('/posts/:id', passport.authenticate('jwt', { session: false }), de
 router.post('/posts/:id/like', passport.authenticate('jwt', { session: false }), likePost);
 router.post('/posts/:id/comment', passport.authenticate('jwt', { session: false }), commentOnPost);
 router.get('/media/:filename', getMediaFile);
+router.get('/posts/user/:userId', passport.authenticate('jwt', { session: false }), getMyPostsByUser);
+
 
 module.exports = router;

@@ -2,11 +2,10 @@ const path = require('path');
 const fs = require('fs');
 const Post = require('../models/Post');
 
-// Create a new post
 exports.createPost = async (req, res) => {
   try {
     const { content, mediaType } = req.body;
-    const mediaPath = req.file ? req.file.filename : null; // Assuming multer is used for file uploads
+    const mediaPath = req.file ? req.file.filename : null; 
 
     const newPost = new Post({
       author: req.user._id,
@@ -25,8 +24,6 @@ exports.createPost = async (req, res) => {
     res.status(500).json({ message: 'Error creating post', error });
   }
 };
-
-// Get all posts with likes and comments
 exports.getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
@@ -58,7 +55,6 @@ exports.getPostById = async (req, res) => {
   }
 };
 
-// Update a post by ID
 exports.updatePost = async (req, res) => {
   try {
     const { content, media, mediaType } = req.body;
@@ -82,7 +78,6 @@ exports.updatePost = async (req, res) => {
   }
 };
 
-// Delete a post by ID
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findByIdAndDelete(req.params.id);
@@ -97,7 +92,6 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-// Like a post
 exports.likePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -110,13 +104,12 @@ exports.likePost = async (req, res) => {
     const isLiked = post.likes.some(like => like.userId.toString() === req.user._id.toString());
 
     if (isLiked) {
-      // Unlike the post
+    
       post.likes = post.likes.filter(like => like.userId.toString() !== req.user._id.toString());
       await post.save();
       return res.status(200).json({ message: 'Post unliked', post });
     }
 
-    // Like the post
     post.likes.push({ userId: req.user._id });
     await post.save();
 
@@ -126,7 +119,6 @@ exports.likePost = async (req, res) => {
   }
 };
 
-// Comment on a post
 exports.commentOnPost = async (req, res) => {
   try {
     const { content } = req.body;
@@ -154,8 +146,6 @@ exports.commentOnPost = async (req, res) => {
     res.status(500).json({ message: 'Error adding comment', error });
   }
 };
-
-// Serve media files (images/videos)
 exports.getMediaFile = (req, res) => {
   try {
     const filePath = path.join(__dirname, '../uploads/', req.params.filename); // Path to the uploaded files
@@ -169,3 +159,21 @@ exports.getMediaFile = (req, res) => {
     res.status(500).json({ message: 'Error fetching file', error });
   }
 };
+exports.getMyPostsByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const posts = await Post.find({ author: userId })
+      .populate('author', 'username')
+      .populate('likes.userId', 'username')
+      .populate('comments.userId', 'username');
+
+    if (posts.length === 0) {
+      return res.status(404).json({ message: 'No posts found for this user' });
+    }
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user posts', error });
+  }
+};
+

@@ -12,5 +12,7 @@ router.delete('/discussions/:id', passport.authenticate('jwt', { session: false 
 router.post('/discussions/:id/like', passport.authenticate('jwt', { session: false }), discussionController.likeDiscussion);
 router.post('/discussions/:id/comment', passport.authenticate('jwt', { session: false }), discussionController.addComment);
 router.post('/discussions/:id/attend', passport.authenticate('jwt', { session: false }), discussionController.attendDiscussion);
+router.get('/discussions/user/:userId', passport.authenticate('jwt', { session: false }), discussionController.getDiscussionsByUser);
+
 
 module.exports = router;
