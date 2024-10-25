@@ -194,10 +194,10 @@ const Sidebar = ({ onClose }) => {
                Campaigns or events
             </Link>
             <Link
-              to="/dashboard/statistics"
-              onClick={() => handleItemClick('/dashboard/statistics')}
+              to="/dashboard/stats"
+              onClick={() => handleItemClick('/dashboard/stats')}
               className={`flex items-center p-3 mb-2 rounded-md ${
-                activeItem === '/dashboard/statistics' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
+                activeItem === '/dashboard/stats' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
               <FaReceipt className="mr-3" />

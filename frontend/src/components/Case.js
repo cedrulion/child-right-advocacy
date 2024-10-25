@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import logo from '../Assets/unicef_logo.png'; 
+import ribLogo from '../Assets/rib.jpg';      
+import policeLogo from '../Assets/police.jpg'; 
+import isangeLogo from '../Assets/isange.png';
 const Case = () => {
   const [activeTab, setActiveTab] = useState('reporting'); 
   const [formData, setFormData] = useState({
@@ -234,20 +237,35 @@ const Case = () => {
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div>
-                <h4 className="text-lg font-bold text-gray-900">Health Emergencies</h4>
-                <p>ISANGE One Stop Centre</p>
-                <p className="text-blue-600">Call 3029</p>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-gray-900">Police & Law Emergencies</h4>
-                <p>Rwanda Investigation Bureau</p>
-                <p className="text-blue-600">Call 116</p>
-                <p>Rwanda National Police</p>
-                <p className="text-blue-600">Call 116</p>
-              </div>
-            </div>
+                  <div className="grid grid-cols-2 gap-2 text-center">
+        <div  className="flex ">
+          <img src={isangeLogo} alt="ISANGE One Stop Centre" className="mx-auto mb-2 w-16 h-16" />
+          <div>
+          <h4 className="text-lg font-bold text-gray-900">Health Emergencies</h4>
+          <p>ISANGE One Stop Centre</p>
+          <p className="text-blue-600">Call 3029</p>
+        </div>
+        </div>
+        <div>
+          <div className="mb-4">
+           <div  className="flex ">
+            <img src={ribLogo} alt="Rwanda Investigation Bureau" className="mx-auto mb-2 w-16 h-16" />
+            <div>
+            <h4 className="text-lg font-bold text-gray-900">Police & Law Emergencies</h4>
+            <p>Rwanda Investigation Bureau</p>
+            <p className="text-blue-600">Call 116</p>
+          </div>
+          </div>
+          <div className="flex ">
+            <img src={policeLogo} alt="Rwanda National Police" className="mx-auto mb-2 w-16 h-16" /> 
+             <div>
+             <p>Rwanda National Police</p>
+            <p className="text-blue-600">Call 116</p>
+          </div>
+          </div>
+      </div>
+        </div>
+      </div>
           </div>
         )}
       </div>

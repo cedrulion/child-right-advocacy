@@ -23,34 +23,39 @@ const Message = () => {
     }
   }, [selectedClient]);
 
-  const fetchClients = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/auth/users', {
+const fetchClients = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/auth/users', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const allClients = response.data;
+
+    // Filter clients based on role
+    const filteredClients = allClients.filter(client => client.role === currentUser.role);
+
+    const previous = [];
+    const newClients = [];
+
+    for (const client of filteredClients) {
+      const res = await axios.get(`http://localhost:5000/api/messages/${client._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const allClients = response.data;
-      const previous = [];
-      const newClients = [];
-
-      for (const client of allClients) {
-        const res = await axios.get(`http://localhost:5000/api/messages/${client._id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.data.length > 0) {
-          previous.push(client);
-        } else {
-          newClients.push(client);
-        }
+      if (res.data.length > 0) {
+        previous.push(client);
+      } else {
+        newClients.push(client);
       }
-
-      setPreviousClients(previous);
-      setNewClients(newClients);
-      setClients(previous); // Initially show clients with previous messages
-
-    } catch (error) {
-      console.error(error);
     }
-  };
+
+    setPreviousClients(previous);
+    setNewClients(newClients);
+    setClients(previous); // Initially show clients with previous messages
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   const fetchMessages = async (clientId) => {
     try {

@@ -23,6 +23,7 @@ import ResourceManagement from './components/ResourceManagement';
 import CaseManagement from './components/CaseManagement';
 import UserManagement from './components/UserManagement';
 import LegalDoc from './components/LegalDoc';
+import Statistics from './components/Statistics';
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route  path="casema" element={<CaseManagement/>} />
           <Route  path="listuser" element={<UserManagement/>} />
           <Route  path="legaldoc" element={<LegalDoc/>} />
+          <Route  path="stats" element={<Statistics/>} />
           </Route> 
         </Routes>
     </Router>

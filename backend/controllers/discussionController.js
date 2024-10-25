@@ -107,8 +107,8 @@ exports.addComment = async (req, res) => {
   }
 };
 exports.attendDiscussion = async (req, res) => {
-  try {console.log(`Looking for discussion with ID: ${req.params.discussionId}`);
-    const discussion = await Discussion.findById(req.params.discussionId);
+  try {console.log(`Looking for discussion with ID: ${req.params.id}`);
+    const discussion = await Discussion.findById(req.params.id);
     if (!discussion) return res.status(404).json({ error: 'Discussion not found' });
     if (discussion.type !== 'Forum') {
       return res.status(400).json({ error: 'Attendance can only be marked for forums' });

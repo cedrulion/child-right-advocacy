@@ -20,7 +20,7 @@ const Join = () => {
 
       <div className="flex space-x-6 mt-8">
 
-       <Link to="/alogin">
+       <Link to="/login">
     <button className="flex items-center space-x-2 bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
       <FaUserTie />
       <span>Go as Admin</span>

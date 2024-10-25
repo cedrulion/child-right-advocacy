@@ -62,7 +62,7 @@ const Login = () => {
         {/* SignUp Form */}
         <form onSubmit={handleSubmit} className="mt-3 bg-gray-500 p-5 text-white font-bold rounded">
           <h3 className="text-2xl font-semibold text-center mb-6 ">
-            USER Login
+            LOGIN
           </h3>
 
           <div className="mb-4">

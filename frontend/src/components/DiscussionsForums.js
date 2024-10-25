@@ -173,35 +173,49 @@ const DiscussionsForums = () => {
           </select>
         </div>
 
-        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden mb-8">
-          <thead>
-            <tr className="bg-gray-800 text-white text-left">
-              <th className="py-3 px-4">Title</th>
-              <th className="py-3 px-4">Type</th>
-              <th className="py-3 px-4">Date</th>
-              <th className="py-3 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {discussions
-              .filter((discussion) => type === 'All' || discussion.type === type)
-              .map((discussion) => (
-                <tr key={discussion._id} className="border-t hover:bg-gray-100 transition duration-150 ease-in-out">
-                  <td className="py-3 px-4">{discussion.title}</td>
-                  <td className="py-3 px-4">{discussion.type}</td>
-                  <td className="py-3 px-4">{new Date(discussion.createdAt).toLocaleString()}</td>
-                  <td className="py-3 px-4 flex space-x-4">
-                    <button onClick={() => handleOpenDiscussionModal(discussion)} className="text-blue-500 hover:text-blue-700">
-                      <FaEdit />
-                    </button>
-                    <button onClick={() => deleteDiscussion(discussion._id)} className="text-red-500 hover:text-red-700">
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+<table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden mb-8">
+  <thead>
+    <tr className="bg-gray-800 text-white text-left">
+      <th className="py-3 px-4">Title</th>
+      <th className="py-3 px-4">Type</th>
+      <th className="py-3 px-4">Date</th>
+      <th className="py-3 px-4">Attendees</th>
+      <th className="py-3 px-4">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {discussions
+      .filter((discussion) => type === 'All' || discussion.type === type)
+      .map((discussion) => (
+        <tr
+          key={discussion._id}
+          className="border-t hover:bg-gray-100 transition duration-150 ease-in-out"
+        >
+          <td className="py-3 px-4">{discussion.title}</td>
+          <td className="py-3 px-4">{discussion.type}</td>
+          <td className="py-3 px-4">
+            {new Date(discussion.createdAt).toLocaleString()}
+          </td>
+          <td className="py-3 px-4">{discussion.attendees.length}</td> 
+          <td className="py-3 px-4 flex space-x-4">
+            <button
+              onClick={() => handleOpenDiscussionModal(discussion)}
+              className="text-blue-500 hover:text-blue-700"
+            >
+              <FaEdit />
+            </button>
+            <button
+              onClick={() => deleteDiscussion(discussion._id)}
+              className="text-red-500 hover:text-red-700"
+            >
+              <FaTrash />
+            </button>
+          </td>
+        </tr>
+      ))}
+  </tbody>
+</table>
+
 
         <h2 className="text-xl font-bold text-gray-800 text-center mb-10">MY POSTS</h2>
         <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
