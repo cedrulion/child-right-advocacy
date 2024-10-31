@@ -136,7 +136,7 @@ const Sidebar = ({ onClose }) => {
               } transition duration-150`}
             >
               <FaComments className="mr-3" />
-              My Discussions
+              My Activities
             </Link>
           </>
         )}
