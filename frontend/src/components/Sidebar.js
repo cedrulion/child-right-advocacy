@@ -45,13 +45,13 @@ const Sidebar = ({ onClose }) => {
       </div>
 
       {/* Navigation Links */}
-      <nav className="mt-4">
+      <nav className="mt-1">
         {userRole === 'USER' && (
           <>
             <Link
               to="/dashboard/postfeed"
               onClick={() => handleItemClick('/dashboard/postfeed')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-1 rounded-md ${
                 activeItem === '/dashboard/postfeed' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
@@ -61,7 +61,7 @@ const Sidebar = ({ onClose }) => {
             <Link
               to="/dashboard/profile"
               onClick={() => handleItemClick('/dashboard/profile')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-1 rounded-md ${
                 activeItem === '/dashboard/profile' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
@@ -71,7 +71,7 @@ const Sidebar = ({ onClose }) => {
             <Link
               to="/dashboard/legaldoc"
               onClick={() => handleItemClick('/dashboard/legaldoc')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-1 rounded-md ${
                 activeItem === '/dashboard/legaldoc' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
@@ -81,7 +81,7 @@ const Sidebar = ({ onClose }) => {
             <Link
               to="/dashboard/message"
               onClick={() => handleItemClick('/dashboard/message')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-1 rounded-md ${
                 activeItem === '/dashboard/message' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
@@ -91,7 +91,7 @@ const Sidebar = ({ onClose }) => {
             <Link
               to="/dashboard/discussions"
               onClick={() => handleItemClick('/dashboard/discussions')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-1 rounded-md ${
                 activeItem === '/dashboard/discussions' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
@@ -101,7 +101,7 @@ const Sidebar = ({ onClose }) => {
             <Link
               to="/dashboard/resources"
               onClick={() => handleItemClick('/dashboard/resources')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-1 rounded-md ${
                 activeItem === '/dashboard/resources' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
@@ -111,7 +111,7 @@ const Sidebar = ({ onClose }) => {
             <Link
               to="/dashboard/case"
               onClick={() => handleItemClick('/dashboard/case')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-21rounded-md ${
                 activeItem === '/dashboard/case' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >
@@ -121,7 +121,7 @@ const Sidebar = ({ onClose }) => {
             <Link
               to="/dashboard/advocacy"
               onClick={() => handleItemClick('/dashboard/advocacy')}
-              className={`flex items-center p-3 mb-2 rounded-md ${
+              className={`flex items-center p-3 mb-1 rounded-md ${
                 activeItem === '/dashboard/advocacy' ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
               } transition duration-150`}
             >

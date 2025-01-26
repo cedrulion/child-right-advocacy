@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import logo from '../Assets/unicef_logo.png';
 import { EyeIcon, TrashIcon } from '@heroicons/react/solid';
 
@@ -24,13 +26,12 @@ const CaseManagement = () => {
     fetchCaseReports();
   }, []);
 
-  // Handler to update the case status
   const handleStatusUpdate = async (id, currentStatus) => {
     const newStatus = currentStatus === 'pending' ? 'reported' : 'pending';
     await axios.put(`${BASE_URL}/reports/${id}`, { status: newStatus }, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    fetchCaseReports(); // Refresh the case reports after updating
+    fetchCaseReports();
   };
 
   const handleDelete = async (id) => {
@@ -40,21 +41,54 @@ const CaseManagement = () => {
     fetchCaseReports();
   };
 
-  const handleGetById = async (id) => {
-    const response = await axios.get(`${BASE_URL}/reports/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log(response.data);
-  };
-
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
   };
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
-    setCurrentPage(1); // Reset to first page when sorting
+    setCurrentPage(1);
+  };
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+
+    // Add Title and Logo
+    doc.setFontSize(18);
+    doc.text('Case Management Report', 14, 20);
+    doc.addImage(logo, 'PNG', 150, 10, 40, 20); // Adjust size and position as needed
+    doc.setFontSize(14);
+    doc.text('Child Right Advocacy', 60, 35);
+
+    // Table Columns and Rows
+    const columns = [
+      'Child Name',
+      'Child Age',
+      'Type of Abuse',
+      'Guardian Name',
+      'Case Severity Level',
+      'Status',
+    ];
+
+    const rows = caseReports.map(report => [
+      report.abusedChildName,
+      report.abusedChildAge,
+      report.typeOfAbuse,
+      report.guardianName,
+      report.reportAs,
+      report.status,
+    ]);
+
+    // Add Table
+    doc.autoTable({
+      startY: 40,
+      head: [columns],
+      body: rows,
+    });
+
+    // Save the PDF
+    doc.save('Case_Management_Report.pdf');
   };
 
   const filteredReports = caseReports
@@ -83,7 +117,6 @@ const CaseManagement = () => {
         </h1>
       </div>
       <div className="mt-8">
-        {/* Search and Sort */}
         <div className="flex justify-between items-center mt-4">
           <h2 className="text-2xl font-bold text-gray-800">Case Management</h2>
           <div className="relative">
@@ -107,6 +140,13 @@ const CaseManagement = () => {
             </select>
           </div>
         </div>
+
+        <button
+          onClick={handleDownloadPDF}
+          className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+        >
+          Download PDF
+        </button>
 
         <table className="min-w-full bg-white border border-gray-300 mt-4">
           <thead>
@@ -142,18 +182,17 @@ const CaseManagement = () => {
                 </td>
                 <td className="py-2 border-b">
                   <button
-                   onClick={() => handleGetById(report._id)}
                     className="text-blue-500 hover:text-blue-700 mr-2"
-                    >
-                  <EyeIcon className="h-5 w-5 inline" />
+                  >
+                    <EyeIcon className="h-5 w-5 inline" />
                   </button>
-                 <button
-                       onClick={() => handleDelete(report._id)}
-                       className="text-red-500 hover:text-red-700"
-                       >
-                 <TrashIcon className="h-5 w-5 inline" /> 
-              </button>
-              </td>
+                  <button
+                    onClick={() => handleDelete(report._id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <TrashIcon className="h-5 w-5 inline" />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

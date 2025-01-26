@@ -1,34 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaComment, FaRetweet, FaHeart } from 'react-icons/fa'; // Importing icons
-import logo from '../Assets/unicef_logo.png'; // Replace with your logo path
+import { FaComment, FaRetweet, FaHeart } from 'react-icons/fa';
+import logo from '../Assets/unicef_logo.png';
 
 const PostFeed = () => {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null); // For media uploads (image or video)
-  const [mediaType, setMediaType] = useState('text'); // Default type is text
-  const [selectedPost, setSelectedPost] = useState(null); // To handle comment modal
-  const [newComment, setNewComment] = useState(''); // Comment text
-  const [likes, setLikes] = useState({}); // To track likes for posts
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [mediaType, setMediaType] = useState('text');
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [newComment, setNewComment] = useState('');
+  const [likes, setLikes] = useState({});
+  
+  const token = localStorage.getItem('token');
 
-  const token = localStorage.getItem('token'); // Get token from localStorage
-
-  // Fetch posts when the component mounts
+  // Fetch posts when the component mounts and periodically refresh
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/posts', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
 
-  const fetchPosts = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/posts', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setPosts(response.data);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    }
-  };
+    fetchPosts();
+
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(fetchPosts, 1000);
+
+    // Cleanup on component unmount
+    return () => clearInterval(interval);
+  }, [token]);
 
   // Handle new post submission
   const handlePost = async () => {
@@ -47,8 +53,10 @@ const PostFeed = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/posts', formData, {
-        headers: { Authorization: `Bearer ${token}` },
-        'Content-Type': 'multipart/form-data',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       setPosts([response.data.post, ...posts]); // Add new post to the list
@@ -86,7 +94,6 @@ const PostFeed = () => {
       );
       setNewComment('');
       setSelectedPost(null); // Close the modal after comment
-      fetchPosts(); // Refresh posts to show new comments
     } catch (error) {
       console.error('Error adding comment:', error);
     }
@@ -152,7 +159,7 @@ const PostFeed = () => {
             <div className="flex space-x-4 mt-3 text-gray-800">
               <button onClick={() => setSelectedPost(post)} className="hover:text-black">
                 <FaComment />
-                <span className="ml-2">{likes[post._id] || post.comments?.length || 0}</span>
+                <span className="ml-2">{post.comments?.length || 0}</span>
               </button>
               <button className="hover:text-black">
                 <FaRetweet />

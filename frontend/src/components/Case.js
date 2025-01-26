@@ -215,22 +215,7 @@ const Case = () => {
           </form>
         ) : (
           <div className="bg-white p-6 shadow-lg rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Case Emergencies</h3>
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Age of Abuse</label>
-                <select
-                  value={ageOfAbuse}
-                  onChange={(e) => setAgeOfAbuse(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                >
-                  {[...Array(100).keys()].map((age) => (
-                    <option key={age} value={age}>
-                      {age}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <div className="col-span-2 text-center">
                 <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
                   Contact Us

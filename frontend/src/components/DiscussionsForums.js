@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import logo from '../Assets/unicef_logo.png';
 
 const DiscussionsForums = () => {
@@ -158,14 +160,34 @@ const DiscussionsForums = () => {
   const sortedCaseReports = caseReports.sort((a, b) =>
     caseReportSort === 'newest' ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt)
   );
+  const generatePDF = () => {
+    const content = document.getElementById('content-to-pdf'); // Specify the container ID
+    html2canvas(content).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('Discussions_Forums.pdf');
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: 'roboto' }}>
+    <div  id="content-to-pdf" className="min-h-screen bg-white" style={{ fontFamily: 'roboto' }} >
       <div className="flex justify-center text-center m-3">
         <img src={logo} alt="UNICEF Logo" className="h-10" />
         <h1 className="text-4xl font-bold text-gray-800">
           Child Rights <span className="text-blue-400">ADVOCACY</span>
         </h1>
+      </div>
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={generatePDF}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
+        >
+          Download as PDF
+        </button>
       </div>
 
       <div className="px-10 py-6">

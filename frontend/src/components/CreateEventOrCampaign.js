@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../Assets/unicef_logo.png'; // Adjust path to logo as necessary
 
@@ -11,6 +12,7 @@ const CreateEventOrCampaign = () => {
     location: '',
     venue: '',
   });
+ const navigate = useNavigate();
 
   const token = localStorage.getItem('token'); // Retrieve token from localStorage
 
@@ -122,9 +124,12 @@ const CreateEventOrCampaign = () => {
           <button type="submit" className="bg-black text-white font-bold py-3 px-10 rounded-md mt-6">
             Create
           </button>
-          <button className="bg-blue-600 text-white font-bold py-3 px-10 rounded-md mt-3">
-            Manage Campaigns & Events
-          </button>
+      <button
+        className="bg-blue-600 text-white font-bold py-3 px-10 rounded-md mt-3"
+        onClick={() => navigate('/dashboard/campaignm')}
+      >
+        Manage Campaigns & Events
+      </button>
         </form>
       </div>
     </div>

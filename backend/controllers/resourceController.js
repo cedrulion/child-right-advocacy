@@ -11,7 +11,7 @@ const addResource = async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const { title, description } = req.body;
+    const { title, name, description } = req.body;
 
     const newResource = new Resource({
       title,

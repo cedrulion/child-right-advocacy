@@ -42,26 +42,25 @@ const ResourceManagement = () => {
     setFormData({ ...formData, file: e.target.files[0] });
   };
 
-  const handleAddResource = async (e) => {
-    e.preventDefault();
-    const formDataToSubmit = new FormData();
-    formDataToSubmit.append('title', formData.title);
-    formDataToSubmit.append('name', formData.name);
-    formDataToSubmit.append('description', formData.description);
-    formDataToSubmit.append('file', formData.file);
+const handleAddResource = async () => {
+  const formDataa = new FormData();
+  formDataa.append('title', formData.title);
+  formDataa.append('name', formData.name);
+  formDataa.append('description', formData.description);
+  formDataa.append('file', formData.file);
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/resources/upload', formDataToSubmit, {
-        headers: { Authorization: `Bearer ${token}` },
+  try {
+    const response = await axios.post('http://localhost:5000/api/resources/upload', formData, {
+      headers: {
         'Content-Type': 'multipart/form-data',
-      });
+      },
+    });
+    console.log('Resource added:', response.data);
+  } catch (error) {
+    console.error('Error adding resource:', error.response?.data || error.message);
+  }
+};
 
-      setResources([...resources, response.data.newResource]);
-      setFormData({ title: '', description: '', file: null });
-    } catch (error) {
-      console.error('Error adding resource:', error);
-    }
-  };
 
   const handleEditResource = (resource) => {
     setFormData({

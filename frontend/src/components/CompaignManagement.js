@@ -7,7 +7,7 @@ const CampaignManagement = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('Newest');
-  const [activeTab, setActiveTab] = useState('Campaigns');
+  const [activeTab, setActiveTab] = useState('Campaign');
   const [editCampaign, setEditCampaign] = useState(null); 
   const [formData, setFormData] = useState({
     type: '',
@@ -18,21 +18,27 @@ const CampaignManagement = () => {
     venue: ''
   });
   const token = localStorage.getItem('token'); 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/campaign', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setData(response.data); 
-        filterDataByType('Campaign'); 
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/campaign', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setData(response.data); // Populate data
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-    fetchData();
-  }, []);
+  fetchData();
+}, []);
+
+useEffect(() => {
+  if (data.length > 0) {
+    filterDataByType('Campaign'); // Filter after data is set
+  }
+}, [data]);
+
 
   const filterDataByType = (type) => {
     const filtered = data.filter(item => item.type === type);
