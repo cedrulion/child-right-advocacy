@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Bar, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -12,7 +11,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import ClipLoader from 'react-spinners/ClipLoader'; // Example loader
 
 ChartJS.register(
   CategoryScale,
@@ -25,36 +23,22 @@ ChartJS.register(
   Legend
 );
 
-const BASE_URL = 'http://localhost:5000/api';
-
 const Statistics = () => {
-  const [caseReports, setCaseReports] = useState([]);
+  // Hardcoded case reports
+  const caseReports = [
+    { createdAt: '2025-01-01', type: 'awareness', status: 'resolved', solutionRate: 90 },
+    { createdAt: '2025-01-15', type: 'engagement', status: 'pending', solutionRate: 70 },
+    { createdAt: '2025-02-05', type: 'awareness', status: 'resolved', solutionRate: 80 },
+    { createdAt: '2025-02-20', type: 'engagement', status: 'resolved', solutionRate: 75 },
+    { createdAt: '2025-03-10', type: 'awareness', status: 'resolved', solutionRate: 95 },
+  ];
+
   const [awarenessLevel, setAwarenessLevel] = useState(0);
   const [engagementLevel, setEngagementLevel] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const token = localStorage.getItem('token');
-
-  const fetchCaseReports = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${BASE_URL}/reports`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCaseReports(response.data);
-      calculateAwarenessLevel(response.data);
-      calculateEngagementLevel(response.data);
-    } catch (err) {
-      setError('Failed to fetch data. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    fetchCaseReports();
-    const interval = setInterval(fetchCaseReports, 60000); // Refresh data every minute
-    return () => clearInterval(interval); // Clean up interval on component unmount
+    calculateAwarenessLevel(caseReports);
+    calculateEngagementLevel(caseReports);
   }, []);
 
   const calculateAwarenessLevel = (reports) => {
@@ -112,9 +96,6 @@ const Statistics = () => {
     ],
   };
 
-  if (loading) return <ClipLoader size={50} color="#4A90E2" />;
-  if (error) return <div className="text-red-500">{error}</div>;
-
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold text-center mb-4">Cases Dashboard</h2>
@@ -126,7 +107,7 @@ const Statistics = () => {
         </div>
 
         <div className="bg-white shadow-md p-4 rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">Solution rate / 100 vs. Month</h3>
+          <h3 className="text-xl font-semibold mb-2">Solution Rate / 100 vs. Month</h3>
           <Bar data={barChartData} />
         </div>
       </div>

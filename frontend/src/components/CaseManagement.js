@@ -16,11 +16,21 @@ const CaseManagement = () => {
   const BASE_URL = 'http://localhost:5000/api';
 
   const fetchCaseReports = async () => {
-    const response = await axios.get(`${BASE_URL}/reports`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setCaseReports(response.data);
+    try {
+      const response = await axios.get(`${BASE_URL}/reports`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCaseReports(response.data);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.error('No case reports found');
+        setCaseReports([]); 
+      } else {
+        console.error('Error fetching case reports:', error.message);
+      }
+    }
   };
+  
 
   useEffect(() => {
     fetchCaseReports();

@@ -139,17 +139,24 @@ const handleAddResource = async () => {
       <div className="max-w-3xl mx-auto bg-white p-6 shadow-md rounded-lg mb-6">
         <h2 className="text-xl font-bold mb-4">{isEditing ? 'Edit Resource' : 'Add New Resource'}</h2>
         <form onSubmit={isEditing ? handleUpdateResource : handleAddResource}>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none"
-              required
-            />
-          </div>
+        <div className="mb-4">
+  <label className="block text-gray-700 font-bold mb-2">Title</label>
+  <select
+    name="title"
+    value={formData.title}
+    onChange={handleInputChange}
+    className="w-full px-4 py-2 border rounded-md focus:outline-none"
+    required
+  >
+    <option value="" disabled>
+      Select a title
+    </option>
+    <option value="visuals">Visuals content</option>
+    <option value="infographics">Infographics</option>
+    <option value="courses">Courses</option>
+  </select>
+</div>
+
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2">Name</label>
             <input

@@ -35,10 +35,9 @@ useEffect(() => {
 
 useEffect(() => {
   if (data.length > 0) {
-    filterDataByType('Campaign'); // Filter after data is set
+    filterDataByType(activeTab); 
   }
-}, [data]);
-
+}, [data, activeTab]);
 
   const filterDataByType = (type) => {
     const filtered = data.filter(item => item.type === type);
@@ -186,7 +185,7 @@ useEffect(() => {
         <table className="table-auto w-full mt-6 bg-white rounded-md shadow-lg">
           <thead className="bg-gray-100">
             <tr className="text-left text-gray-600">
-              <th className="py-3 px-4">ID</th>
+             
               <th className="py-3 px-4">Type</th>
               <th className="py-3 px-4">Meeting_Type</th>
               <th className="py-3 px-4">Date</th>
@@ -200,7 +199,7 @@ useEffect(() => {
           <tbody>
             {filteredData.map((item) => (
               <tr key={item._id} className="border-t text-gray-700">
-                <td className="py-3 px-4">{item._id}</td>
+                
                 <td className="py-3 px-4">{item.type}</td>
                 <td className="py-3 px-4">{item.meetingType}</td>
                 <td className="py-3 px-4">{new Date(item.date).toLocaleDateString()}</td>

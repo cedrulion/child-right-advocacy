@@ -59,7 +59,7 @@ const AdvocacyPage = () => {
               <p className="text-gray-600">Venue: {event.venue}</p>
               <div className="flex mt-4">
                 <FaArrowRight className="text-black text-xl pt-2" />
-                <a href={event.link} className="text-gray-900 font-semibold text-lg underline ml-2">
+                <a href={event.venue} className="text-gray-900 font-semibold text-lg underline ml-2">
                   Click here to attend
                 </a>
               </div>
@@ -83,7 +83,7 @@ const AdvocacyPage = () => {
               <p className="text-gray-600 flex items-center"><FaClock className="mr-2 text-green-500" /> Time: {campaign.time}</p>
               <p className="text-gray-600 flex items-center"><FaMapMarkerAlt className="mr-2 text-purple-500" /> Location: {campaign.location}</p>
               <p className="text-gray-600 flex items-center"><FaMapMarkerAlt className="mr-2 text-purple-500" /> Venue: {campaign.venue}</p>
-              <a href={campaign.link} className="text-blue-500 underline flex items-center mt-4">
+              <a href={campaign.venue} className="text-blue-500 underline flex items-center mt-4">
                 <FaArrowRight className="mr-2" /> Learn more
               </a>
             </div>
