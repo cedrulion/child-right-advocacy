@@ -30,9 +30,9 @@ const Resource = () => {
       if (activeTab === 'courses') {
         return resource.title === 'courses';
       } else if (activeTab === 'visuals') {
-        return resource.title === 'Visual Contents';
+        return resource.title === 'visuals';
       } else if (activeTab === 'infographics') {
-        return resource.title === 'Infographics';
+        return resource.title === 'infographics';
       }
       return false;
     });
@@ -158,21 +158,36 @@ const Resource = () => {
       {activeTab === 'infographics' && (
         <section className="mt-8">
           <h2 className="text-2xl font-bold">Infographics</h2>
-          <div className="flex justify-center flex-wrap">
-            {filteredResources.map((resource) => (
-              <div key={resource._id} className="w-1/4 m-4 p-4 border rounded-lg bg-white">
-                <h3 className="text-xl font-bold">{resource.name}</h3>
-                <p className="my-2">{resource.description}</p>
-                <a
-                  href="#"
-                  onClick={() => handleDownload(resource.file)}
-                  className="border border-blue-500 px-4 py-2 rounded-md"
-                >
-                  Download Resource
-                </a>
-              </div>
-            ))}
+          <div className="flex justify-center flex-wrap gap-6">
+      {filteredResources.map((resource) => (
+        <div
+          key={resource._id}
+          className="flex items-center bg-white p-4 shadow-md rounded-lg w-80"
+        >
+          <div   className="flex justify-between gap-20"
+        >
+           <div>
+            <h3 className="text-lg font-semibold text-gray-800">
+              {resource.name}
+            </h3>
+            <p className="text-sm text-gray-500">{resource.description}</p>
+            <p className="text-sm text-gray-500 mt-1">{resource.date}</p>
+            </div>
+            {/* Download Button */}
+           <div>
+            <a
+              href="#"
+              className="flex items-center text-blue-500 mt-2 hover:underline"
+              onClick={() => handleDownload(resource.file)}
+            >
+              <FaDownload className="text-lg " />
+             
+            </a>
+            </div>
           </div>
+        </div>
+      ))}
+    </div>
         </section>
       )}
     </div>

@@ -85,10 +85,11 @@ const deleteResource = async (req, res) => {
     fs.unlink(filePath, async (err) => {
       if (err) {
         console.error('Error deleting file:', err);
-        return res.status(500).json({ message: 'Error deleting file', err });
+        return res.status(500).json({ message: 'Error deleting file', err }); // Ensure `return` is used here
       }
+
       await Resource.findByIdAndDelete(req.params.id);
-      return res.status(200).json({ message: 'Resource deleted successfully' });
+      return res.status(200).json({ message: 'Resource deleted successfully' }); // Ensure `return` is used here
     });
   } catch (error) {
     return res.status(500).json({ message: 'Error deleting resource', error });
@@ -97,16 +98,21 @@ const deleteResource = async (req, res) => {
 
 
 // Get File (Serve file)
-const getFile = (req, res) => {
+const getFile = async (req, res) => {
   const fileName = req.params.filename;
   const filePath = path.join(__dirname, '../uploads/', fileName);
 
-  res.sendFile(filePath, (err) => {
-    if (err) {
+  try {
+    if (!fs.existsSync(filePath)) {
       return res.status(404).json({ message: 'File not found' });
     }
-  });
+    return res.sendFile(filePath);
+  } catch (error) {
+    console.error('Error serving file:', error);
+    return res.status(500).json({ message: 'Error serving file', error });
+  }
 };
+
 
 module.exports = {
   addResource,

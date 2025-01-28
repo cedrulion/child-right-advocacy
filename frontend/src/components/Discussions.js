@@ -144,16 +144,19 @@ const Discussions = () => {
                     <span>Forum by {discussion.userId.username}</span>
                   </div>
                   <span className="ml-2 text-sm">{new Date(discussion.createdAt).toLocaleString()}</span>
-                  <button
-                    onClick={() => attendForum(discussion._id)}
-                    className="flex items-center justify-between bg-gray-800 text-white py-3 px-8 rounded-md shadow-lg transition duration-300 ease-in-out hover:bg-gray-700 transform hover:scale-105"
-                  >
-                    <span className="flex items-center">
-                      <span className="mr-2 text-xl">➔</span> 
-                      Click here to Attend
-                    </span>
-                    <span className="text-sm text-gray-300 underline">{discussion.link}</span>
-                  </button>
+                  <a
+  href={discussion.link}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center justify-between bg-gray-800 text-white py-3 px-8 rounded-md shadow-lg transition duration-300 ease-in-out hover:bg-gray-700 transform hover:scale-105"
+>
+  <span className="flex items-center">
+    <span className="mr-2 text-xl">➔</span>
+    Click here to Attend
+  </span>
+  <span className="text-sm text-gray-300 underline">{discussion.link}</span>
+</a>
+
                 </div>
               ))}
           </div>

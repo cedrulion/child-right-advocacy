@@ -152,12 +152,7 @@ useEffect(() => {
           >
             Events
           </button>
-          <button
-            onClick={() => handleTabSwitch('Social Media')}
-            className={`text-gray-500 ${activeTab === 'Social Media' ? 'border-b-4 border-gray-800' : 'border-transparent'}`}
-          >
-            Social Medias
-          </button>
+
         </nav>
       </div>
 
